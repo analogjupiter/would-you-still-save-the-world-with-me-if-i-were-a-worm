@@ -83,8 +83,6 @@ extern (C) static:
 	}
 
 	int open_fn(void* user_data, char* uri, mpv_stream_cb_info* info) {
-		import core.stdc.stdio;
-
 		GameState* state = cast(GameState*) user_data;
 
 		AudioFile* af = null;
@@ -144,8 +142,6 @@ struct AudioPlayer {
 	}
 
 	void play(const(char)* url, const(char)* options = null) {
-		return;
-
 		const(char)*[6] cmd;
 		cmd[0] = "loadfile".ptr;
 		cmd[1] = url;
