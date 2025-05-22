@@ -35,8 +35,11 @@ extern (C) void* gameLoaderImpl(void* gameState) {
 		static immutable string audioIntro = import("forestry.mod");
 		state.assets.audioIntro = AudioFile(cast(Chunk) audioIntro, 45);
 
-		static immutable string audioPuzzle = import("dingling balls.xm");
-		state.assets.audioPuzzle = AudioFile(cast(Chunk) audioPuzzle, 100);
+		static immutable string audioPuzzle1 = import("not it.mod");
+		state.assets.audioPuzzle1 = AudioFile(cast(Chunk) audioPuzzle1, 85);
+
+		static immutable string audioPuzzle2 = import("dingling balls.xm");
+		state.assets.audioPuzzle2 = AudioFile(cast(Chunk) audioPuzzle2, 100);
 	}
 
 	// Fonts

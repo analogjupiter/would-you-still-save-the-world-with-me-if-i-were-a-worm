@@ -94,7 +94,10 @@ extern (C) static:
 			af = &state.assets.audioIntro;
 		}
 		else if (uri[4] == 'p') {
-			af = &state.assets.audioPuzzle;
+			af = &state.assets.audioPuzzle1;
+		}
+		else if (uri[4] == 's') {
+			af = &state.assets.audioPuzzle2;
 		}
 
 		info.cookie = cast(void*) af;

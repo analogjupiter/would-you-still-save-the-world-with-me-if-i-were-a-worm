@@ -27,7 +27,7 @@ void onActivate(ref GameState state) {
 	state.puzzleScreen.speed = defaultSpeed;
 	state.puzzleScreen.ticksCheckpoint = state.ticks.total;
 	state.clickL.reset();
-	state.audio.play(state.assets.audioPuzzleURL.ptr);
+	handleAudio(state, true);
 	state.puzzleScreen.g.messenger.tick(state.ticks.total);
 	drawAll(state);
 }
@@ -47,6 +47,7 @@ void onDraw(ref GameState state) {
 
 		state.puzzleScreen.ticksCheckpoint = state.ticks.total;
 		state.puzzleScreen.g.tick();
+		handleAudio(state, false);
 		return true;
 
 	}
@@ -99,6 +100,21 @@ void onInput(ref GameState state, MouseClick input) {
 
 	state.puzzleScreen.g.partner.wormTo = gridPos;
 	drawAll(state);
+}
+
+void handleAudio(ref GameState state, bool force) {
+	auto associatedAudio(Region r) {
+		return (r == Region.snow)
+			? state.assets.audioPuzzle2URL.ptr : state.assets.audioPuzzle1URL.ptr;
+	}
+
+	auto audioNext = associatedAudio(state.puzzleScreen.g.currentRegion);
+	auto audioPrev = associatedAudio(state.puzzleScreen.previousAudioRegion);
+
+	if (force || (audioPrev != audioNext)) {
+		state.puzzleScreen.previousAudioRegion = state.puzzleScreen.g.currentRegion;
+		state.audio.play(audioNext);
+	}
 }
 
 void drawBackground(ref GameState state, ref Painter painter) {

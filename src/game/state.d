@@ -6,6 +6,7 @@ import game.geometry;
 import game.glyph;
 import game.interactive;
 import game.memory;
+import game.puzzle.avicii : Region;
 import game.puzzle.data;
 import game.pango;
 
@@ -63,10 +64,12 @@ struct Assets {
 
 	static immutable audioMenuURL = "e://m";
 	static immutable audioIntroURL = "e://i";
-	static immutable audioPuzzleURL = "e://p";
+	static immutable audioPuzzle1URL = "e://p";
+	static immutable audioPuzzle2URL = "e://s";
 	AudioFile audioMenu;
 	AudioFile audioIntro;
-	AudioFile audioPuzzle;
+	AudioFile audioPuzzle1;
+	AudioFile audioPuzzle2;
 }
 
 struct LoaderState {
@@ -91,4 +94,5 @@ struct PuzzleScreen {
 	int speed;
 	char[] speedMessage;
 	ulong ticksCheckpoint;
+	Region previousAudioRegion;
 }
