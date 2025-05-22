@@ -202,7 +202,7 @@ private:
 			break;
 
 		case Entity.hole:
-			messenger.send("Ouch! Your partner has fallen into a hole.", MessageType.alert);
+			messenger.send("Ouch! Your partner has fallen into a hole.", MessageType.alert, 3500);
 			this.loadLevel();
 			break;
 
