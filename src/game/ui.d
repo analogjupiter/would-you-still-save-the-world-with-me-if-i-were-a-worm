@@ -118,6 +118,9 @@ bool runUI(const(InteractiveScreen)* initialScreen) {
 				if ((e.key.keysym.sym == SDLK_f) || (e.key.keysym.sym == SDLK_F11)) {
 					gameState.fullscreen = !gameState.fullscreen;
 				}
+				else if (e.key.keysym.sym == SDLK_m) {
+					gameState.audio.muted = !gameState.audio.muted;
+				}
 				break;
 
 			default:

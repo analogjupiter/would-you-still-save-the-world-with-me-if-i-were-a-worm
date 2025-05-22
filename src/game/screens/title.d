@@ -18,9 +18,15 @@ static immutable titleScreen = InteractiveScreen(
 
 private:
 
+version (none) {
+	enum buttonPlay = Rectangle(Point(395, 80), Size(200, 50));
+}
 enum buttonPlay = Rectangle(Point(395, 140), Size(200, 50));
 enum buttonFull = Rectangle(Point(395, 200), Size(200, 50));
-enum buttonQuit = Rectangle(Point(395, 260), Size(200, 50));
+enum buttonMute = Rectangle(Point(395, 260), Size(200, 50));
+version (none) {
+	enum buttonQuit = Rectangle(Point(395, 260), Size(200, 50));
+}
 
 void onActivate(ref GameState state) {
 	version (none) {
@@ -50,11 +56,30 @@ void onActivate(ref GameState state) {
 
 		painter.drawRectangle(ColorRGBA128F(0.30, 0.75, 0.30, 0.75), buttonPlay.size, buttonPlay.upperLeft);
 		painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonFull.size, buttonFull.upperLeft);
-		painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonQuit.size, buttonQuit.upperLeft);
+		painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonMute.size, buttonMute.upperLeft);
+		version (none) {
+			painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonQuit.size, buttonQuit.upperLeft);
+		}
 
-		painter.drawText("Play", state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), Point(400, 140));
-		painter.drawText("Fullscreen", state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), Point(400, 200));
-		painter.drawText("Quit", state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), Point(400, 260));
+		enum labelPlayPos = buttonPlay.upperLeft + Point(5, 0);
+		enum labelFullPos = buttonFull.upperLeft + Point(5, 0);
+		enum labelMutePos = buttonMute.upperLeft + Point(5, 0);
+		version (none) {
+			enum labelQuitPos = buttonQuit.upperLeft + Point(5, 0);
+		}
+		static immutable labelPlay = "Play";
+		static immutable labelFull = "Fullscreen";
+		static immutable labelMute = "Mute";
+		version (none) {
+			static immutable labelQuit = "Quit";
+		}
+		painter.drawText(labelPlay, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelPlayPos);
+		painter.drawText(labelFull, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelFullPos);
+		painter.drawText(labelMute, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelMutePos);
+
+		version (none) {
+			painter.drawText(labelQuit, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelQuitPos);
+		}
 
 		painter.free();
 	}
@@ -89,9 +114,14 @@ void onInput(ref GameState state, MouseClick input) {
 	else if (buttonFull.contains(input.pos)) {
 		state.fullscreen = !state.fullscreen;
 	}
-	else if (buttonQuit.contains(input.pos)) {
+	else if (buttonMute.contains(input.pos)) {
+		state.audio.muted = !state.audio.muted;
+	}
+	// dfmt off
+	else version (none) if (buttonQuit.contains(input.pos)) {
 		state.running = false;
 	}
+	// dfmt on
 }
 
 void drawAnimatedEarth(ref GameState state, ref Painter painter) {

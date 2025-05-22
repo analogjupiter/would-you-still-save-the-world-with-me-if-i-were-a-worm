@@ -117,10 +117,12 @@ extern (C) static:
 struct AudioPlayer {
 	private {
 		mpv_handle* _ctx;
+		bool _muted;
 	}
 
-	public this(mpv_handle* mpv) {
+	public this(mpv_handle* mpv, bool muted) {
 		_ctx = mpv;
+		_muted = muted;
 	}
 
 	static AudioPlayer makeNew(GameState* state) {
@@ -133,12 +135,13 @@ struct AudioPlayer {
 		mpv_set_option(ctx, "input-default-bindings", MPV_FORMAT_FLAG, &no);
 		mpv_set_option(ctx, "input-vo-keyboard", MPV_FORMAT_FLAG, &no);
 		mpv_set_option(ctx, "osc", MPV_FORMAT_FLAG, &no);
+		mpv_set_option(ctx, "mute", MPV_FORMAT_FLAG, &no);
 
 		mpv_initialize(ctx);
 
 		mpv_stream_cb_add_ro(ctx, "e", state, &AudioFileHandler.open_fn);
 
-		return AudioPlayer(ctx);
+		return AudioPlayer(ctx, false);
 	}
 
 	void play(const(char)* url, const(char)* options = null) {
@@ -163,6 +166,16 @@ struct AudioPlayer {
 
 	void volume(int64_t value) {
 		mpv_set_option(_ctx, "volume", MPV_FORMAT_INT64, &value);
+	}
+
+	bool muted() {
+		return _muted;
+	}
+
+	void muted(bool value) {
+		int v = (value) ? 1 : 0;
+		mpv_set_option(_ctx, "mute", MPV_FORMAT_FLAG, &v);
+		_muted = value;
 	}
 
 	void stop() {
