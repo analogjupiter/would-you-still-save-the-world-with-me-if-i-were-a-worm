@@ -9,7 +9,7 @@ import libharfbuzz_2;
 private enum FT_Int32 FT_LOAD_DEFAULT = 0x0;
 private enum FT_Int32 FT_LOAD_COLOR = (1L << 20);
 
-private extern extern (C) FT_Error FT_Load_Sfnt_Table(
+private extern extern (C) FT_Error FT_Load_Sfnt_Table( // @suppress(dscanner.style.phobos_naming_convention)
 	FT_Face face,
 	FT_ULong tag,
 	FT_Long offset,

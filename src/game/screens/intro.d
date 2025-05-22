@@ -119,7 +119,7 @@ void drawSlide(ref GameState state) {
 		~ `drawSlide` ~ slideIdx.stringof ~ `(state, painter);`
 		~ `break slideSelection;`;
 
-slideSelection:
+slideSelection: // @suppress(dscanner.suspicious.unused_label)
 	switch (state.introScreen.slide) {
 		static foreach (slideIdx; 0 .. totalSlides) {
 			mixin(switchCase!slideIdx);
