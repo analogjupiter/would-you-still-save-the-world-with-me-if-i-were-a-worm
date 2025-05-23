@@ -104,7 +104,7 @@ void onInput(ref GameState state, MouseClick input) {
 
 void handleAudio(ref GameState state, bool force) {
 	auto associatedAudio(Region r) {
-		return (r == Region.snow)
+		return (r == Region.boss)
 			? state.assets.audioPuzzle2URL.ptr : state.assets.audioPuzzle1URL.ptr;
 	}
 

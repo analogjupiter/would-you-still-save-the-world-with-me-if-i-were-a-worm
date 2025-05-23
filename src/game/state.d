@@ -65,7 +65,7 @@ struct Assets {
 	static immutable audioMenuURL = "e://m";
 	static immutable audioIntroURL = "e://i";
 	static immutable audioPuzzle1URL = "e://p";
-	static immutable audioPuzzle2URL = "e://s";
+	static immutable audioPuzzle2URL = "e://b";
 	AudioFile audioMenu;
 	AudioFile audioIntro;
 	AudioFile audioPuzzle1;

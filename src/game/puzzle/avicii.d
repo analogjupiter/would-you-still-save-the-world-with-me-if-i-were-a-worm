@@ -5,6 +5,7 @@ enum Region {
 	gras,
 	snow,
 	volc,
+	boss,
 }
 
 // dfmt off

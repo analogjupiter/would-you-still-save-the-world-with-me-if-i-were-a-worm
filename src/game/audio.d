@@ -96,7 +96,7 @@ extern (C) static:
 		else if (uri[4] == 'p') {
 			af = &state.assets.audioPuzzle1;
 		}
-		else if (uri[4] == 's') {
+		else if (uri[4] == 'b') {
 			af = &state.assets.audioPuzzle2;
 		}
 
