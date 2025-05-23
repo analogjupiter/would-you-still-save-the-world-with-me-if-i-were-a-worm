@@ -276,7 +276,19 @@ private:
 		const idx = partner.pos.linearOffset(grid.width);
 		world.field[idx] = Entity.air;
 
-		const msg = (rand() % 2 == 1) ? "Delicious!" : "Yummy!";
+		static immutable msg1 = "Yummy!";
+		static immutable msg2 = "Delicious!";
+		static immutable msg3 = "An apple a day keeps the doctor away!";
+
+		// dfmt off
+		const msg =
+			(rand() % 2 == 1)
+				? msg2
+				: (rand() % 20 == 19)
+					? msg3
+					: msg1;
+		// dfmt on
+
 		messenger.send(msg, MessageType.success);
 	}
 }
