@@ -4,7 +4,6 @@ struct Emoji {
 static:
 	immutable airplane = "✈️";
 	immutable angryFace = "😠";
-	immutable beans = "🫘";
 	immutable bullseye = "🎯";
 	immutable chequeredFlag = "🏁";
 	immutable cloudWithRain = "🌧️";

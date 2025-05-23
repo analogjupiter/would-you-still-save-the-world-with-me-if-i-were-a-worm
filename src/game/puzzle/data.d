@@ -20,7 +20,6 @@ struct Level {
 enum Entity : char {
 	air = ' ',
 	rock = '#',
-	iceblock = '=',
 	hole = 'o',
 	apple = 'a',
 	wormhole1 = '1',
@@ -40,13 +39,12 @@ enum Entity : char {
 	wormholeF = 'F',
 	herb = 'y',
 	seedling = 'i',
-	bean = '.',
 	finish = 'X',
 	partner = 'P',
 }
 
 bool isWall(Entity entity) {
-	return (entity == Entity.rock) || (entity == Entity.iceblock);
+	return (entity == Entity.rock);
 }
 
 struct World {
@@ -241,9 +239,6 @@ private:
 		case Entity.wormholeE:
 		case Entity.wormholeF:
 			this.handleWormhole(entity);
-			break;
-
-		case Entity.bean:
 			break;
 
 		case Entity.finish:

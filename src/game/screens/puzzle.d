@@ -281,6 +281,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 	case Entity.air:
 	case Entity.partner:
 		break;
+
 	case Entity.rock:
 		if (state.puzzleScreen.g.currentRegion == Region.snow) {
 			drawImpl(Emoji.iceCube);
@@ -289,10 +290,12 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 			drawImpl(Emoji.rock);
 		}
 		break;
+
 	case Entity.hole:
 		pos.y += 10;
 		drawImpl(Emoji.hole);
 		break;
+
 	case Entity.apple:
 		if (state.puzzleScreen.g.currentRegion == Region.volc) {
 			drawImpl(Emoji.greenApple);
@@ -301,6 +304,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 			drawImpl(Emoji.redApple);
 		}
 		break;
+
 	case Entity.wormhole1:
 	case Entity.wormhole2:
 	case Entity.wormhole3:
@@ -318,14 +322,13 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 	case Entity.wormholeF:
 		drawImpl(Emoji.cyclone);
 		break;
+
 	case Entity.herb:
 		drawImpl(Emoji.herb);
 		break;
+
 	case Entity.seedling:
 		drawImpl(Emoji.seedling);
-		break;
-	case Entity.bean:
-		drawImpl(Emoji.beans);
 		break;
 
 	case Entity.finish:
