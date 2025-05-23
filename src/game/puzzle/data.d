@@ -243,7 +243,7 @@ private:
 
 		case Entity.finish:
 			if (!this.finishIsUnlocked) {
-				messenger.send("Locked. There are still apples left.", MessageType.alert, 5000);
+				messenger.send("Locked. Eat all apples first.", MessageType.alert, 5000);
 				break;
 			}
 			++level;
