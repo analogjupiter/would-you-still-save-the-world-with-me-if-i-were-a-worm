@@ -241,6 +241,6 @@ static immutable regions = [
 ];
 // dfmt on
 
-enum levelsTotal = 11;
+enum levelsTotal = 13;
 enum firstLevel = 1;
 enum guideLevel = 1;
