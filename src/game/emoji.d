@@ -10,6 +10,7 @@ static:
 	immutable cloudWithRain = "🌧️";
 	immutable clownFace = "🤡";
 	immutable collisionSymbol = "💥";
+	immutable crossMark = "❌";
 	immutable crystalBall = "🔮";
 	immutable cyclone = "🌀";
 	immutable dashSymbol = "💨";
@@ -19,6 +20,7 @@ static:
 	immutable earthGlobeEuropeAfrica = "🌍";
 	immutable faxMachine = "📠";
 	immutable fire = "🔥";
+	immutable greenApple = "🍏";
 	immutable herb = "🌿";
 	immutable hole = "🕳️";
 	immutable iceCube = "🧊";
@@ -26,6 +28,7 @@ static:
 	immutable moon = "🌙";
 	immutable orange = "🍊";
 	immutable poutingFace = "😡";
+	immutable redApple = "🍎";
 	immutable radioactiveSign = "☢️";
 	immutable rock = "🪨";
 	immutable roundPushpin = "📍";

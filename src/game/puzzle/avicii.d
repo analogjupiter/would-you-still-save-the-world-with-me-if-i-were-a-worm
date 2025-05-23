@@ -175,6 +175,36 @@ enum level11 =
 /+ 09 +/ "i#####1######### ###i" ~
 /+ 10 +/ "####7o#o5######## P##";
 
+enum level12 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "P 1                  " ~
+/+ 01 +/ " a        X        a " ~
+/+ 02 +/ " aa               aa " ~
+/+ 03 +/ " a a             a a " ~
+/+ 04 +/ " a  a           a  a " ~
+/+ 05 +/ " a   a         a   a " ~
+/+ 06 +/ " a    a       a    a " ~
+/+ 07 +/ " a     a     a     a " ~
+/+ 08 +/ " a      a   a      a " ~
+/+ 09 +/ " a       a a       a " ~
+/+ 10 +/ " 1        a        a ";
+
+enum level13 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "1a#       P         1" ~
+/+ 01 +/ "############         " ~
+/+ 02 +/ "   o  5  o# o#o o#o o" ~
+/+ 03 +/ "    o   o #o o o o o " ~
+/+ 04 +/ "oooo oao  # o#o o#o o" ~
+/+ 05 +/ "X 6o  o   #2 # 3 # 4 " ~
+/+ 06 +/ "#####################" ~
+/+ 07 +/ "      #       #      " ~
+/+ 08 +/ "  a   #   5   #   6  " ~
+/+ 09 +/ "      #       #      " ~
+/+ 10 +/ "  2   #   3   #   4  ";
+
 // dfmt on
 
 static immutable levelNames = [
@@ -189,6 +219,8 @@ static immutable levelNames = [
 	"Level 9: Oh dear…",
 	"Level 10: Icy Investigation",
 	"Level 11: Hot Hills",
+	"Level 12: ABC — as in: Apple Bobbing Challenge",
+	"Level 13: Cruel Chambers",
 ];
 
 // dfmt off
@@ -204,6 +236,8 @@ static immutable regions = [
 	/*  9 */ Region.dirt,
 	/* 10 */ Region.snow,
 	/* 11 */ Region.volc,
+	/* 12 */ Region.gras,
+	/* 13 */ Region.volc,
 ];
 // dfmt on
 

@@ -22,6 +22,7 @@ enum Entity : char {
 	rock = '#',
 	iceblock = '=',
 	hole = 'o',
+	apple = 'a',
 	wormhole1 = '1',
 	wormhole2 = '2',
 	wormhole3 = '3',
@@ -54,6 +55,16 @@ struct World {
 	Entity getEntity(Point gridPos) {
 		const idx = gridPos.linearOffset(grid.width);
 		return field[idx];
+	}
+
+	bool hasApplesLeft() {
+		foreach (entity; field) {
+			if (entity == Entity.apple) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
 
@@ -91,6 +102,10 @@ struct PuzzleGame {
 
 	string currentLevelName() {
 		return levelNames[level - 1];
+	}
+
+	bool finishIsUnlocked() {
+		return !world.hasApplesLeft;
 	}
 
 	void loadLevel() {
@@ -206,6 +221,10 @@ private:
 			this.loadLevel();
 			break;
 
+		case Entity.apple:
+			this.handleApple();
+			break;
+
 		case Entity.wormhole1:
 		case Entity.wormhole2:
 		case Entity.wormhole3:
@@ -228,6 +247,10 @@ private:
 			break;
 
 		case Entity.finish:
+			if (!this.finishIsUnlocked) {
+				messenger.send("Locked. There are still apples left.", MessageType.alert, 5000);
+				break;
+			}
 			++level;
 			messenger.send("Level complete. Good job!", MessageType.success);
 			this.loadLevel();
@@ -250,6 +273,16 @@ private:
 				break;
 			}
 		}
+	}
+
+	void handleApple() {
+		import core.stdc.stdlib : rand;
+
+		const idx = partner.pos.linearOffset(grid.width);
+		world.field[idx] = Entity.air;
+
+		const msg = (rand() % 2 == 1) ? "Delicious!" : "Yummy!";
+		messenger.send(msg, MessageType.success);
 	}
 }
 

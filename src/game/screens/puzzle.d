@@ -282,8 +282,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 	case Entity.partner:
 		break;
 	case Entity.rock:
-		const region = state.puzzleScreen.g.currentRegion;
-		if (region == Region.snow) {
+		if (state.puzzleScreen.g.currentRegion == Region.snow) {
 			drawImpl(Emoji.iceCube);
 		}
 		else {
@@ -293,6 +292,14 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 	case Entity.hole:
 		pos.y += 10;
 		drawImpl(Emoji.hole);
+		break;
+	case Entity.apple:
+		if (state.puzzleScreen.g.currentRegion == Region.volc) {
+			drawImpl(Emoji.greenApple);
+		}
+		else {
+			drawImpl(Emoji.redApple);
+		}
 		break;
 	case Entity.wormhole1:
 	case Entity.wormhole2:
@@ -326,8 +333,15 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 
 		enum flagSize = gridCell.y * 2 / 3;
 		state.assets.fontEmoji2.pixelSizes = flagSize;
+
 		pos = pos + Point(13, -2);
 		drawImpl(Emoji.chequeredFlag);
+
+		if (!state.puzzleScreen.g.finishIsUnlocked) {
+			pos = pos + Point(-8, 8);
+			drawImpl(Emoji.crossMark);
+		}
+
 		state.assets.fontEmoji2.pixelSizes = gridCell.y;
 		break;
 
