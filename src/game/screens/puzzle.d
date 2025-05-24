@@ -298,6 +298,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 		break;
 
 	case Entity.apple:
+		pos.x += 3;
 		if (state.puzzleScreen.g.currentRegion == Region.volc) {
 			drawImpl(Emoji.greenApple);
 		}
