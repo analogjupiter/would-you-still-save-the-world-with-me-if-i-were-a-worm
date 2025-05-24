@@ -249,32 +249,20 @@ private:
 		static void moveTurtle(ref Point pos, World world) {
 			import core.stdc.stdlib : rand;
 
-			const direction = (rand() % 9);
+			const direction = (rand() % 5);
 
 			Point move;
 			if (direction == 0) {
 				move = Point(0, -1);
 			}
 			else if (direction == 1) {
-				move = Point(1, -1);
-			}
-			else if (direction == 2) {
 				move = Point(1, 0);
 			}
-			else if (direction == 3) {
-				move = Point(1, 1);
-			}
-			else if (direction == 4) {
+			else if (direction == 2) {
 				move = Point(0, 1);
 			}
-			else if (direction == 5) {
-				move = Point(-1, 1);
-			}
-			else if (direction == 6) {
+			else if (direction == 3) {
 				move = Point(-1, 0);
-			}
-			else if (direction == 7) {
-				move = Point(-1, -1);
 			}
 			else {
 				return;
