@@ -362,8 +362,9 @@ void drawPartner(ref GameState state, ref Painter painter) {
 }
 
 void drawTurtles(ref GameState state, ref Painter painter) {
+	enum turtleOffset = offset + Point(0, 5);
 	foreach (gridPosTurtle; state.puzzleScreen.g.world.turtles) {
-		const canvPosTurtle = (gridPosTurtle * gridCell) + offset;
+		const canvPosTurtle = (gridPosTurtle * gridCell) + turtleOffset;
 		painter.drawGlyph(Emoji.turtle.ptr, state.assets.fontEmoji2, canvPosTurtle);
 	}
 }

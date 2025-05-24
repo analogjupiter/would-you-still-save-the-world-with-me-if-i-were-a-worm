@@ -48,6 +48,13 @@ bool isWall(Entity entity) {
 	return (entity == Entity.rock);
 }
 
+bool isWormhole(Entity entity) {
+	return (
+		((entity >= Entity.wormhole1) && (entity <= Entity.wormhole9))
+			|| ((entity >= Entity.wormholeA) && (entity <= Entity.wormholeF))
+	);
+}
+
 struct World {
 	Entity[] field;
 	Point[] turtles;
@@ -292,14 +299,21 @@ private:
 	}
 
 	void handleTrigger() {
-		foreach (turtle; world.turtles) {
-			if (turtle == partner.pos) {
-				messenger.send("Ouch! Your partner got attacked by a turtle.", MessageType.alert, 3500);
-				return this.loadLevel();
+		const entity = world.getEntity(partner.pos);
+
+		if (entity.isWormhole) {
+			this.handleWormhole(entity);
+			partner.lastTrigger = entity;
+			return;
+		}
+		else {
+			foreach (turtle; world.turtles) {
+				if (turtle == partner.pos) {
+					messenger.send("Ouch! Your partner got attacked by a turtle.", MessageType.alert, 3500);
+					return this.loadLevel();
+				}
 			}
 		}
-
-		const entity = world.getEntity(partner.pos);
 
 		switch (entity) {
 		default:
@@ -311,24 +325,6 @@ private:
 
 		case Entity.apple:
 			this.handleApple();
-			break;
-
-		case Entity.wormhole1:
-		case Entity.wormhole2:
-		case Entity.wormhole3:
-		case Entity.wormhole4:
-		case Entity.wormhole5:
-		case Entity.wormhole6:
-		case Entity.wormhole7:
-		case Entity.wormhole8:
-		case Entity.wormhole9:
-		case Entity.wormholeA:
-		case Entity.wormholeB:
-		case Entity.wormholeC:
-		case Entity.wormholeD:
-		case Entity.wormholeE:
-		case Entity.wormholeF:
-			this.handleWormhole(entity);
 			break;
 
 		case Entity.finish:
