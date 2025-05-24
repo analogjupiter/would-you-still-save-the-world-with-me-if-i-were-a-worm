@@ -46,3 +46,19 @@ void drawAnimatedEarth(ref GameState state, ref Painter painter, ref int animati
 		animationFrame = 0;
 	}
 }
+
+void drawToothbrushMustacheMan(ref GameState state, ref Painter painter, int size, Point pos) {
+	painter.drawGlyph(Emoji.poutingFace.ptr, state.assets.fontEmoji2, size, pos);
+
+	const mustacheSize = Size(
+		(size >> 3) + (size >> 6),
+		(size >> 3) - (size >> 5),
+	);
+
+	const posMustache = pos + Point(
+		(size >> 1) - (mustacheSize.width >> 1),
+		(size >> 1) + ((size * 5) >> 5),
+	);
+
+	painter.drawRectangle(ColorRGB24(0x29, 0x2F, 0x33), mustacheSize, posMustache);
+}

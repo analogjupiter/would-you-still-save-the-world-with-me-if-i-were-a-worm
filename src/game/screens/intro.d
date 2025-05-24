@@ -7,6 +7,7 @@ import game.geometry;
 import game.glyph;
 import game.interactive;
 import game.pango;
+import game.screens.common;
 import game.state;
 
 static immutable introScreen = InteractiveScreen(
@@ -174,22 +175,6 @@ void drawWaves(ref GameState state, ref Painter painter) {
 
 		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, waveSize, Point(x, y));
 	}
-}
-
-void drawToothbrushMustacheMan(ref GameState state, ref Painter painter, int size, Point pos) {
-	painter.drawGlyph(Emoji.poutingFace.ptr, state.assets.fontEmoji2, size, pos);
-
-	const mustacheSize = Size(
-		(size >> 3) + (size >> 6),
-		(size >> 3) - (size >> 5),
-	);
-
-	const posMustache = pos + Point(
-		(size >> 1) - (mustacheSize.width >> 1),
-		(size >> 1) + ((size * 5) >> 5),
-	);
-
-	painter.drawRectangle(ColorRGB24(0x29, 0x2F, 0x33), mustacheSize, posMustache);
 }
 
 void drawApparatus(ref GameState state, ref Painter painter, Point pos) {

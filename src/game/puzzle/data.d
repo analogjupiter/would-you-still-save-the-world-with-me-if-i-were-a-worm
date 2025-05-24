@@ -41,6 +41,7 @@ enum Entity : char {
 	herb = 'y',
 	seedling = 'i',
 	finish = 'X',
+	toothbrushMoustacheMan = 'H',
 	partner = 'P',
 }
 
@@ -306,6 +307,19 @@ private:
 			partner.lastTrigger = entity;
 			return;
 		}
+		else if (entity == Entity.finish) {
+			if (!this.finishIsUnlocked) {
+				messenger.send("Locked. Eat all apples first.", MessageType.alert, 5000);
+				partner.lastTrigger = entity;
+				return;
+			}
+
+			++level;
+			if (level <= bossLevel) {
+				messenger.send("Level complete. Good job!", MessageType.success);
+			}
+			return this.loadLevel();
+		}
 		else {
 			foreach (turtle; world.turtles) {
 				if (turtle == partner.pos) {
@@ -326,15 +340,6 @@ private:
 		case Entity.apple:
 			this.handleApple();
 			break;
-
-		case Entity.finish:
-			if (!this.finishIsUnlocked) {
-				messenger.send("Locked. Eat all apples first.", MessageType.alert, 5000);
-				break;
-			}
-			++level;
-			messenger.send("Level complete. Good job!", MessageType.success);
-			return this.loadLevel();
 		}
 
 		partner.lastTrigger = entity;

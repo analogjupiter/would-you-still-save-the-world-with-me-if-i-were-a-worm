@@ -11,6 +11,7 @@ import game.pango;
 import game.puzzle.avicii;
 import game.puzzle.data;
 import game.puzzle.messenger;
+import game.screens.common;
 import game.state;
 
 static immutable puzzleScreen = InteractiveScreen(
@@ -137,6 +138,10 @@ void drawBackground(ref GameState state, ref Painter painter) {
 		painter.clear(colorVolc);
 		break;
 
+	case boss:
+		painter.clear(colorBoss);
+		break;
+
 	default:
 		crashf("Region %d\n", region);
 	}
@@ -187,6 +192,7 @@ enum colorDirt = ColorRGB24(0xCC, 0xAA, 0x66);
 enum colorGras = ColorRGB24(0xAA, 0xCC, 0x66);
 enum colorSnow = ColorRGB24(0xCC, 0xFF, 0xFF);
 enum colorVolc = ColorRGB24(0xFF, 0xCC, 0xCC);
+enum colorBoss = ColorRGB24(0x11, 0x11, 0x11);
 
 enum colorMessageAlert = ColorRGB24(0xFF, 0x22, 0x22);
 enum colorMessageSuccess = ColorRGB24(0x00, 0xFF, 0x66);
@@ -349,6 +355,10 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 		}
 
 		state.assets.fontEmoji2.pixelSizes = gridCell.y;
+		break;
+
+	case Entity.toothbrushMoustacheMan:
+		drawToothbrushMustacheMan(state, painter, gridCell.y, pos);
 		break;
 
 	default:
