@@ -48,9 +48,15 @@ void onDraw(ref GameState state) {
 
 		state.puzzleScreen.ticksCheckpoint = state.ticks.total;
 		state.puzzleScreen.g.tick();
+
+		if (state.puzzleScreen.g.gameComplete) {
+			import game.screens.gg;
+
+			state.nextScreen = &ggScreen;
+		}
+
 		handleAudio(state, false);
 		return true;
-
 	}
 
 	if (shouldDraw()) {

@@ -344,15 +344,30 @@ enum level23 =
 /+       "0         1         2" +/
 /+       "012345678901234567890" +/
 /+ 00 +/ "          o          " ~
-/+ 01 +/ " a        P        a " ~
-/+ 02 +/ "          o          " ~
+/+ 01 +/ " a    o   P   o    a " ~
+/+ 02 +/ "       o  o  o       " ~
 /+ 03 +/ "        TTTTT        " ~
 /+ 04 +/ "        T###T        " ~
-/+ 05 +/ "oooaaoooT#H#Toooaaooo" ~
+/+ 05 +/ "  oooo  T#H#T  oooo  " ~
 /+ 06 +/ "        T###T        " ~
 /+ 07 +/ "        TTTTT        " ~
-/+ 08 +/ "          o          " ~
-/+ 09 +/ " a        X        a " ~
+/+ 08 +/ "       o  o  o       " ~
+/+ 09 +/ " a    o   X   o    a " ~
+/+ 10 +/ "          o          ";
+
+enum level24 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "          o          " ~
+/+ 01 +/ "      o       o      " ~
+/+ 02 +/ "       o  o  o       " ~
+/+ 03 +/ "                     " ~
+/+ 04 +/ "         # #         " ~
+/+ 05 +/ "  oooo    H    oooo  " ~
+/+ 06 +/ "         # #         " ~
+/+ 07 +/ "                     " ~
+/+ 08 +/ "       o  o  o       " ~
+/+ 09 +/ "      o   P   o      " ~
 /+ 10 +/ "          o          ";
 
 // dfmt on
@@ -381,6 +396,7 @@ static immutable levelNames = [
 	"Boss Stage",
 	"Boss Stage [Phase 2]",
 	"Boss Stage [Phase 3]",
+	"Boss Stage [Phase 4]",
 ];
 
 // dfmt off
@@ -408,10 +424,12 @@ static immutable regions = [
 	/* 20 */ Region.boss,
 	/* 21 */ Region.boss,
 	/* 22 */ Region.boss,
+	/* 23 */ Region.boss,
+	/* 24 */ Region.boss,
 ];
 // dfmt on
 
-enum levelsTotal = 23;
+enum levelsTotal = 24;
 enum firstLevel = 1;
 enum guideLevel = 1;
 enum bossLevel = 21;

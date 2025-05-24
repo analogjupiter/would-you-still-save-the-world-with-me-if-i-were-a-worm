@@ -84,6 +84,7 @@ struct PuzzleGame {
 		Partner partner;
 		World world;
 		int level;
+		bool gameComplete;
 		Messenger messenger;
 	}
 
@@ -93,6 +94,8 @@ struct PuzzleGame {
 
 	static PuzzleGame makeNew(ref Allocator allocator) {
 		auto pg = PuzzleGame();
+
+		pg.gameComplete = false;
 
 		enum entitiesCount = grid.area;
 		Entity[] field = allocator.makeSlice!Entity(entitiesCount);
@@ -339,6 +342,10 @@ private:
 
 		case Entity.apple:
 			this.handleApple();
+			break;
+
+		case Entity.toothbrushMoustacheMan:
+			gameComplete = true;
 			break;
 		}
 
