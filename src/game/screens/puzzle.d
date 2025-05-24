@@ -338,12 +338,13 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 		enum flagSize = gridCell.y * 2 / 3;
 		state.assets.fontEmoji2.pixelSizes = flagSize;
 
-		pos = pos + Point(13, -2);
-		drawImpl(Emoji.chequeredFlag);
-
-		if (!state.puzzleScreen.g.finishIsUnlocked) {
-			pos = pos + Point(-8, 8);
-			drawImpl(Emoji.crossMark);
+		if (state.puzzleScreen.g.finishIsUnlocked) {
+			pos = pos + Point(13, -2);
+			drawImpl(Emoji.chequeredFlag);
+		}
+		else {
+			pos = pos + Point(13, -2);
+			drawImpl(Emoji.lock);
 		}
 
 		state.assets.fontEmoji2.pixelSizes = gridCell.y;

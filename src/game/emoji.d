@@ -9,7 +9,6 @@ static:
 	immutable cloudWithRain = "🌧️";
 	immutable clownFace = "🤡";
 	immutable collisionSymbol = "💥";
-	immutable crossMark = "❌";
 	immutable crystalBall = "🔮";
 	immutable cyclone = "🌀";
 	immutable dashSymbol = "💨";
@@ -23,6 +22,7 @@ static:
 	immutable herb = "🌿";
 	immutable hole = "🕳️";
 	immutable iceCube = "🧊";
+	immutable lock = "🔒";
 	immutable manLightSkinTone = "👨🏻";
 	immutable moon = "🌙";
 	immutable orange = "🍊";
