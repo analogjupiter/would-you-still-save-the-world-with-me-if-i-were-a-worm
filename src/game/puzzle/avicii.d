@@ -224,15 +224,15 @@ enum level15 =
 /+       "0         1         2" +/
 /+       "012345678901234567890" +/
 /+ 00 +/ "##  oo    a    oo  ##" ~
-/+ 01 +/ "#A i oo   1   oo i B#" ~
+/+ 01 +/ "#  i oo   1   oo i  #" ~
 /+ 02 +/ "  iai oo  o  oo iai  " ~
-/+ 03 +/ "   i   o#####o   i   " ~
+/+ 03 +/ "   i  Ao#####oB  i   " ~
 /+ 04 +/ "oooooooA#o1o#Booooooo" ~
 /+ 05 +/ " a    4o#4P2#o2    X " ~
 /+ 06 +/ "oooooooD#o3o#Cooooooo" ~
-/+ 07 +/ "   i   o#####o   i   " ~
+/+ 07 +/ "   i  Do#####oC  i   " ~
 /+ 08 +/ "  iai oo  o  oo iai  " ~
-/+ 09 +/ "#D i oo   3   oo i C#" ~
+/+ 09 +/ "#  i oo   3   oo i  #" ~
 /+ 10 +/ "##  oo    a    oo  ##";
 
 enum level16 =
