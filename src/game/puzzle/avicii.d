@@ -205,6 +205,66 @@ enum level13 =
 /+ 09 +/ "      #       #      " ~
 /+ 10 +/ "  2   #   3   #   4  ";
 
+enum level14 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "2#6#3#A#7#B#9#8#5#4#1" ~
+/+ 01 +/ " # # # # # # # # # # " ~
+/+ 02 +/ " # # # # # # # # # # " ~
+/+ 03 +/ " # # # # # # # # # # " ~
+/+ 04 +/ " # # # # # # # # # # " ~
+/+ 05 +/ "P#a#a#a#a#X#a#a#a#a#i" ~
+/+ 06 +/ " # # # # # # # # # # " ~
+/+ 07 +/ " # # # # # # # # # # " ~
+/+ 08 +/ " # # # # # # # # # # " ~
+/+ 09 +/ " # # # # # # # # # # " ~
+/+ 10 +/ "1#4#5#8#9#A#B#6#7#2#3";
+
+enum level15 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "##  oo    a    oo  ##" ~
+/+ 01 +/ "#A i oo   1   oo i B#" ~
+/+ 02 +/ "  iai oo  o  oo iai  " ~
+/+ 03 +/ "   i   o#####o   i   " ~
+/+ 04 +/ "oooooooA#o1o#Booooooo" ~
+/+ 05 +/ " a    4o#4P2#o2    X " ~
+/+ 06 +/ "oooooooD#o3o#Cooooooo" ~
+/+ 07 +/ "   i   o#####o   i   " ~
+/+ 08 +/ "  iai oo  o  oo iai  " ~
+/+ 09 +/ "#D i oo   3   oo i C#" ~
+/+ 10 +/ "##  oo    a    oo  ##";
+
+enum level16 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ " X          Ao#oB  ao" ~
+/+ 01 +/ "################## ##" ~
+/+ 02 +/ "6   5o#o5 ao#o9     A" ~
+/+ 03 +/ "## ##################" ~
+/+ 04 +/ "4    3oo#E  a#o8 a  6" ~
+/+ 05 +/ "################### #" ~
+/+ 06 +/ "a C a D Eo# 4 ao#oa 7" ~
+/+ 07 +/ "#####################" ~
+/+ 08 +/ "8 a 9o#o3  1oo#oB  Co" ~
+/+ 09 +/ "#####################" ~
+/+ 10 +/ "oa D#o 2 ao#oo1  P 2o";
+
+enum level17 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "#####################" ~
+/+ 01 +/ "#P                 a#" ~
+/+ 02 +/ "# iiiiiiiiiiiiiiiii #" ~
+/+ 03 +/ "# iT             Ti #" ~
+/+ 04 +/ "# i               i #" ~
+/+ 05 +/ "# i       X       i #" ~
+/+ 06 +/ "# i               i #" ~
+/+ 07 +/ "# iT             Ti #" ~
+/+ 08 +/ "# iiiiiiiiiiiiiiiii #" ~
+/+ 09 +/ "#a                 a#" ~
+/+ 10 +/ "#####################";
+
 // dfmt on
 
 static immutable levelNames = [
@@ -221,6 +281,10 @@ static immutable levelNames = [
 	"Level 11: Hot Hills",
 	"Level 12: ABC — as in: Apple Bobbing Challenge",
 	"Level 13: Cruel Chambers",
+	"Level 14: Lonely Lanes",
+	"Level 15: Ancient Altar (another alliteration)",
+	"Level 16: Haunted House",
+	"Level 17: Turtle Terror",
 ];
 
 // dfmt off
@@ -238,9 +302,13 @@ static immutable regions = [
 	/* 11 */ Region.volc,
 	/* 12 */ Region.gras,
 	/* 13 */ Region.volc,
+	/* 14 */ Region.dirt,
+	/* 15 */ Region.gras,
+	/* 16 */ Region.snow,
+	/* 17 */ Region.dirt,
 ];
 // dfmt on
 
-enum levelsTotal = 13;
+enum levelsTotal = 17;
 enum firstLevel = 1;
 enum guideLevel = 1;
