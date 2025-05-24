@@ -294,8 +294,9 @@ private:
 
 			const targetEntity = world.getEntity(next);
 			if (
-				targetEntity.isWall
-				|| targetEntity == Entity.turtle
+				targetEntity.isWall ||
+				targetEntity == Entity.turtle ||
+				targetEntity == Entity.toothbrushMoustacheMan
 				) {
 				return;
 			}
