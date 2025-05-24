@@ -242,12 +242,34 @@ void drawApparatus(ref GameState state, ref Painter painter, Point pos) {
 	painter.drawGlyph(Emoji.radioactiveSign.ptr, state.assets.fontEmoji2, 16, posSign);
 }
 
+enum Chapter {
+	intro,
+	interlude,
+	ending,
+}
+
 pragma(inline, true) {
 
-	void drawPageText(int pageIdx, int first, int total)(ref GameState state, ref Painter painter, string text) {
+	void drawPageText(int pageIdx, Chapter chapter)(ref GameState state, ref Painter painter, string text) {
+		static if (chapter == Chapter.intro) {
+			enum first = introFirstSlide;
+			enum total = introTotalSlides;
+			enum name = "Introduction";
+		}
+		static if (chapter == Chapter.interlude) {
+			enum first = interludeFirstSlide;
+			enum total = interludeTotalSlides;
+			enum name = "Interlude";
+		}
+		static if (chapter == Chapter.ending) {
+			enum first = endingFirstSlide;
+			enum total = endingTotalSlides;
+			enum name = "Ending";
+		}
+
 		enum pageNoInt = pageIdx - first + 1;
 		enum pageNo = pageNoInt.stringof;
-		static immutable page = "Page " ~ pageNo ~ " of " ~ total.stringof ~ " — Introduction";
+		static immutable page = "Page " ~ pageNo ~ " of " ~ total.stringof ~ " — " ~ name;
 
 		painter.drawText(page, state.assets.fontTextM, 12, pageColor, pagePos);
 		painter.drawText(text, state.assets.fontTextR, 18, textColor, textPos);
@@ -268,7 +290,7 @@ pragma(inline, true) {
 
 		painter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
 		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
-		drawPageText!(0, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(0, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide1(ref GameState state, ref Painter painter) {
@@ -286,7 +308,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, 24, Point(540, 245));
 		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
-		drawPageText!(1, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(1, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide2(ref GameState state, ref Painter painter) {
@@ -302,7 +324,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.airplane.ptr, state.assets.fontEmoji2, 48, Point(90, 200));
 		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji2, 48, Point(170, 180));
 		drawEvildoers(state, painter, Point(365, 170));
-		drawPageText!(2, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(2, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide3(ref GameState state, ref Painter painter) {
@@ -322,7 +344,7 @@ pragma(inline, true) {
 
 		drawWaves(state, painter);
 		drawToothbrushMustacheMan(state, painter, 100, Point(520, 185));
-		drawPageText!(3, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(3, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide4(ref GameState state, ref Painter painter) {
@@ -339,7 +361,7 @@ pragma(inline, true) {
 			~ "\nthat joines the particles to form a human body.";
 
 		drawApparatus(state, painter, Point(450, 200));
-		drawPageText!(4, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(4, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide5(ref GameState state, ref Painter painter) {
@@ -354,7 +376,7 @@ pragma(inline, true) {
 
 		drawEvildoers(state, painter, Point(20, 190));
 		drawApparatus(state, painter, Point(450, 200));
-		drawPageText!(5, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(5, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide6(ref GameState state, ref Painter painter) {
@@ -371,7 +393,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji1, Point(245, 160));
 		painter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
 		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
-		drawPageText!(6, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(6, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide7(ref GameState state, ref Painter painter) {
@@ -388,7 +410,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji2, 84, Point(259, 258));
 		painter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
 		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
-		drawPageText!(7, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(7, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide8(ref GameState state, ref Painter painter) {
@@ -410,7 +432,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(250, 155));
 		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(315, 215));
 		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(300, 245));
-		drawPageText!(8, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(8, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide9(ref GameState state, ref Painter painter) {
@@ -424,7 +446,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
 
 		drawAnimatedEarth(state, painter, true);
-		drawPageText!(9, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(9, Chapter.intro)(state, painter, text);
 	}
 
 	void drawSlide10(ref GameState state, ref Painter painter) {
@@ -435,7 +457,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
 
 		drawAnimatedEarth(state, painter, true);
-		drawPageText!(10, introFirstSlide, introTotalSlides)(state, painter, text);
+		drawPageText!(10, Chapter.intro)(state, painter, text);
 		painter.drawText(seg1, state.assets.fontTextR, 18, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
@@ -444,7 +466,7 @@ pragma(inline, true) {
 
 		drawAnimatedEarth(state, painter, true);
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(11, introFirstSlide, introTotalSlides)(state, painter, "");
+		drawPageText!(11, Chapter.intro)(state, painter, "");
 		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
@@ -453,7 +475,7 @@ pragma(inline, true) {
 
 		drawAnimatedEarth(state, painter, true);
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(12, interludeFirstSlide, interludeTotalSlides)(state, painter, "");
+		drawPageText!(12, Chapter.interlude)(state, painter, "");
 		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
@@ -462,7 +484,7 @@ pragma(inline, true) {
 
 		drawAnimatedEarth(state, painter, true);
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(13, interludeFirstSlide, interludeTotalSlides)(state, painter, "");
+		drawPageText!(13, Chapter.interlude)(state, painter, "");
 		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
@@ -471,7 +493,7 @@ pragma(inline, true) {
 
 		drawAnimatedEarth(state, painter, true);
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(14, endingFirstSlide, endingTotalSlides)(state, painter, "");
+		drawPageText!(14, Chapter.ending)(state, painter, "");
 		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 }
