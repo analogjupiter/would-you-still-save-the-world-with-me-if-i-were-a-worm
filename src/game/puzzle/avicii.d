@@ -265,6 +265,21 @@ enum level17 =
 /+ 09 +/ "#a                 a#" ~
 /+ 10 +/ "#####################";
 
+enum level18 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
+/+ 00 +/ "1P        a       T#a" ~
+/+ 01 +/ "          a       T#3" ~
+/+ 02 +/ "          a       T##" ~
+/+ 03 +/ "####T     a       3 T" ~
+/+ 04 +/ "a  #T     a         T" ~
+/+ 05 +/ "  2#T     a         T" ~
+/+ 06 +/ "####T     a         T" ~
+/+ 07 +/ "    2     a         T" ~
+/+ 08 +/ "          a      T###" ~
+/+ 09 +/ "          a      T#1 " ~
+/+ 10 +/ "T         a       # X";
+
 // dfmt on
 
 static immutable levelNames = [
@@ -284,7 +299,8 @@ static immutable levelNames = [
 	"Level 14: Lonely Lanes",
 	"Level 15: Ancient Altar (another alliteration)",
 	"Level 16: Haunted House",
-	"Level 17: Turtle Terror",
+	"Level 17: Watch out! Hungry turtles ahead.",
+	"Level 18: Turtle Terror",
 ];
 
 // dfmt off
@@ -306,9 +322,10 @@ static immutable regions = [
 	/* 15 */ Region.gras,
 	/* 16 */ Region.snow,
 	/* 17 */ Region.dirt,
+	/* 18 */ Region.gras,
 ];
 // dfmt on
 
-enum levelsTotal = 17;
+enum levelsTotal = 18;
 enum firstLevel = 1;
 enum guideLevel = 1;
