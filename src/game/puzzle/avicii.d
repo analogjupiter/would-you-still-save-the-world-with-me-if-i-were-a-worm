@@ -298,6 +298,21 @@ enum level19 =
 enum level20 =
 /+       "0         1         2" +/
 /+       "012345678901234567890" +/
+/+ 00 +/ "ooooooooooooooooooooo" ~
+/+ 01 +/ "o     ooooooooooooooo" ~
+/+ 02 +/ "o  P  oo           oo" ~
+/+ 03 +/ "o     oo    T T    oo" ~
+/+ 04 +/ "oo   ooo  ooooooo  oo" ~
+/+ 05 +/ "oo   ooo  ooooooo  oo" ~
+/+ 06 +/ "oo   ooo  ooooooo  oo" ~
+/+ 07 +/ "oo   ooo  ooooooo  oo" ~
+/+ 08 +/ "oo        ooooooo  oo" ~
+/+ 09 +/ "oo      a ooooo      " ~
+/+ 10 +/ "oo        ooooo   X  ";
+
+enum level21 =
+/+       "0         1         2" +/
+/+       "012345678901234567890" +/
 /+ 00 +/ "                     " ~
 /+ 01 +/ " a        P        a " ~
 /+ 02 +/ "                     " ~
@@ -310,7 +325,7 @@ enum level20 =
 /+ 09 +/ " a        X        a " ~
 /+ 10 +/ "                     ";
 
-enum level21 =
+enum level22 =
 /+       "0         1         2" +/
 /+       "012345678901234567890" +/
 /+ 00 +/ "          o          " ~
@@ -325,7 +340,7 @@ enum level21 =
 /+ 09 +/ " a        P        a " ~
 /+ 10 +/ "          o          ";
 
-enum level22 =
+enum level23 =
 /+       "0         1         2" +/
 /+       "012345678901234567890" +/
 /+ 00 +/ "          o          " ~
@@ -361,10 +376,11 @@ static immutable levelNames = [
 	"Level 16: Haunted House",
 	"Level 17: Watch out! Hungry turtles ahead.",
 	"Level 18: Turtle Terror",
-	"Level 19: The End of the World — Where turtles can walk on holes.",
-	"Boss Stage: Forward to the Past",
-	"Boss Stage: Forward to the Past [Phase 2]",
-	"Boss Stage: Forward to the Past [Phase 3]",
+	"Level 19: At the End of the World — Where turtles can walk on holes.",
+	"Level 20: Forward to the Past",
+	"Boss Stage",
+	"Boss Stage [Phase 2]",
+	"Boss Stage [Phase 3]",
 ];
 
 // dfmt off
@@ -388,13 +404,14 @@ static immutable regions = [
 	/* 17 */ Region.dirt,
 	/* 18 */ Region.gras,
 	/* 19 */ Region.volc,
+	/* 20 */ Region.volc,
 	/* 20 */ Region.boss,
 	/* 21 */ Region.boss,
 	/* 22 */ Region.boss,
 ];
 // dfmt on
 
-enum levelsTotal = 22;
+enum levelsTotal = 23;
 enum firstLevel = 1;
 enum guideLevel = 1;
-enum bossLevel = 20;
+enum bossLevel = 21;
