@@ -175,25 +175,26 @@ struct PuzzleGame {
 			this.handleTrigger();
 		}
 
-		_moved = this.movePartner();
+		const status = this.movePartner();
+		_moved = (status != 0);
 
-		if (_moved) {
+		if (status == 2) {
 			this.moveTurtles();
 		}
 	}
 
 private:
-	bool movePartner() {
+	int movePartner() {
 		static immutable msgHitAWall = "Obstacle!";
 
 		if (partner.wormTo.x < 0) {
-			return false;
+			return 0;
 		}
 
 		if (partner.pos == partner.wormTo) {
 			partner.wormTo.x = -1;
 			partner.lastTrigger = Entity.air;
-			return true; // run trigger on current cell if applicable
+			return 1; // run trigger on current cell if applicable
 		}
 
 		const Point delta = partner.wormTo - partner.pos;
@@ -214,13 +215,13 @@ private:
 						// none
 						partner.wormTo.x = -1;
 						messenger.send(msgHitAWall, MessageType.alert);
-						return false;
+						return 0;
 					}
 				}
 			}
 
 			partner.pos = next;
-			return true;
+			return 2;
 		}
 
 		if (delta.x != 0) {
@@ -237,11 +238,11 @@ private:
 		if (world.getEntity(next).isWall) {
 			partner.wormTo.x = -1;
 			messenger.send(msgHitAWall, MessageType.alert);
-			return false;
+			return 0;
 		}
 
 		partner.pos = next;
-		return true;
+		return 2;
 	}
 
 	void moveTurtles() {
