@@ -84,7 +84,8 @@ struct PuzzleGame {
 		Partner partner;
 		World world;
 		int level;
-		bool gameComplete;
+		bool gameCompleteMain;
+		bool gameCompleteBoss;
 		Messenger messenger;
 	}
 
@@ -95,7 +96,8 @@ struct PuzzleGame {
 	static PuzzleGame makeNew(ref Allocator allocator) {
 		auto pg = PuzzleGame();
 
-		pg.gameComplete = false;
+		pg.gameCompleteMain = false;
+		pg.gameCompleteBoss = false;
 
 		enum entitiesCount = grid.area;
 		Entity[] field = allocator.makeSlice!Entity(entitiesCount);
@@ -321,6 +323,9 @@ private:
 			if (level <= bossLevel) {
 				messenger.send("Level complete. Good job!", MessageType.success, 1000);
 			}
+			if (level == bossLevel) {
+				gameCompleteMain = true;
+			}
 			return this.loadLevel();
 		}
 		else {
@@ -345,7 +350,7 @@ private:
 			break;
 
 		case Entity.toothbrushMoustacheMan:
-			gameComplete = true;
+			gameCompleteBoss = true;
 			break;
 		}
 

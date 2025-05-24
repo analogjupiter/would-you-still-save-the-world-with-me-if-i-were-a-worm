@@ -33,7 +33,6 @@ void onActivate(ref GameState state) {
 
 	state.clickL.reset();
 	state.introScreen.pressedSkipOnce = false;
-	state.introScreen.slide = 0;
 	state.introScreen.earth = 0;
 	state.introScreen.earthTicksCheckpoint = state.ticks.total;
 	drawSlide(state);
@@ -71,7 +70,15 @@ void onInput(ref GameState state, MouseClick input) {
 			drawSlide(state);
 		}
 		else {
-			skipIntro(state);
+			if (state.introScreen.slide < introTotalSlides) {
+				skipIntro(state);
+			}
+			else if (state.introScreen.slide < interludeTotalSlides) {
+				skipInterlude(state);
+			}
+			else if (state.introScreen.slide < endingTotalSlides) {
+				skipEnding(state);
+			}
 		}
 	}
 	else {
@@ -89,8 +96,18 @@ void onInput(ref GameState state, MouseClick input) {
 			drawSlide(state);
 		}
 		else if (buttonNext.contains(input.pos)) {
-			if (state.introScreen.slide == finalSlide) {
+			if (state.introScreen.slide == introFinalSlide) {
 				skipIntro(state);
+				return;
+			}
+
+			if (state.introScreen.slide == interludeFinalSlide) {
+				skipInterlude(state);
+				return;
+			}
+
+			if (state.introScreen.slide == endingFinalSlide) {
+				skipEnding(state);
 				return;
 			}
 
@@ -104,7 +121,46 @@ void skipIntro(ref GameState state) {
 	pragma(inline, true);
 	import game.screens.puzzle;
 
+	state.introScreen.slide = interludeFirstSlide;
 	state.nextScreen = &puzzleScreen;
+}
+
+void skipInterlude(ref GameState state) {
+	pragma(inline, true);
+	import game.screens.puzzle;
+
+	state.introScreen.slide = endingFirstSlide;
+	state.nextScreen = &puzzleScreen;
+}
+
+void skipEnding(ref GameState state) {
+	pragma(inline, true);
+	import game.screens.gg;
+
+	version (none) {
+		state.introScreen.slide = postCreditsFirstSlide;
+	}
+	state.nextScreen = &ggScreen;
+}
+
+bool isAnyFinalSlide(ref GameState state) {
+	return (
+		(state.introScreen.slide == introFinalSlide)
+			|| (state.introScreen.slide == interludeFinalSlide)
+			|| (state.introScreen.slide == endingFinalSlide));
+}
+
+bool isAnyFinalPrePuzzleSlide(ref GameState state) {
+	return (
+		(state.introScreen.slide == introFinalSlide)
+			|| (state.introScreen.slide == interludeFinalSlide));
+}
+
+bool isAnyFirstSlide(ref GameState state) {
+	return (
+		(state.introScreen.slide == introFirstSlide)
+			|| (state.introScreen.slide == interludeFirstSlide)
+			|| (state.introScreen.slide == endingFirstSlide));
 }
 
 void drawSlide(ref GameState state) {
@@ -133,8 +189,8 @@ slideSelection: // @suppress(dscanner.suspicious.unused_label)
 	const skipText = (state.introScreen.pressedSkipOnce) ? "Are you sure?" : "Skip Intro";
 	const skipColr = (state.introScreen.pressedSkipOnce) ? ColorRGB24(0xFF, 0x99, 0x77) : ColorRGB24(0x9A, 0x9B, 0x9C);
 	const prevColr = ColorRGB24(0xBC, 0xBE, 0xBF);
-	const nextText = (state.introScreen.slide == finalSlide) ? "Play" : "Next";
-	const nextColr = (state.introScreen.slide == finalSlide) ? ColorRGB24(0x00, 0xFF, 0x99) : ColorRGB24(0xDD, 0xDE, 0xDF);
+	const nextText = (isAnyFinalPrePuzzleSlide(state)) ? "Play" : "Next";
+	const nextColr = (isAnyFinalSlide(state)) ? ColorRGB24(0x00, 0xFF, 0x99) : ColorRGB24(0xDD, 0xDE, 0xDF);
 
 	painter.drawRectangle(skipColr, buttonSkip.size, buttonSkip.upperLeft);
 	painter.drawRectangle(prevColr, buttonPrev.size, buttonPrev.upperLeft);
@@ -188,10 +244,10 @@ void drawApparatus(ref GameState state, ref Painter painter, Point pos) {
 
 pragma(inline, true) {
 
-	void drawPageText(int pageIdx)(ref GameState state, ref Painter painter, string text) {
-		enum pageNoInt = pageIdx + 1;
+	void drawPageText(int pageIdx, int first, int total)(ref GameState state, ref Painter painter, string text) {
+		enum pageNoInt = pageIdx - first + 1;
 		enum pageNo = pageNoInt.stringof;
-		static immutable page = "Page " ~ pageNo ~ " of " ~ totalSlides.stringof ~ " — Introduction";
+		static immutable page = "Page " ~ pageNo ~ " of " ~ total.stringof ~ " — Introduction";
 
 		painter.drawText(page, state.assets.fontTextM, 12, pageColor, pagePos);
 		painter.drawText(text, state.assets.fontTextR, 18, textColor, textPos);
@@ -212,7 +268,7 @@ pragma(inline, true) {
 
 		painter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
 		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
-		drawPageText!0(state, painter, text);
+		drawPageText!(0, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide1(ref GameState state, ref Painter painter) {
@@ -230,7 +286,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, 24, Point(540, 245));
 		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
-		drawPageText!1(state, painter, text);
+		drawPageText!(1, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide2(ref GameState state, ref Painter painter) {
@@ -246,7 +302,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.airplane.ptr, state.assets.fontEmoji2, 48, Point(90, 200));
 		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji2, 48, Point(170, 180));
 		drawEvildoers(state, painter, Point(365, 170));
-		drawPageText!2(state, painter, text);
+		drawPageText!(2, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide3(ref GameState state, ref Painter painter) {
@@ -266,7 +322,7 @@ pragma(inline, true) {
 
 		drawWaves(state, painter);
 		drawToothbrushMustacheMan(state, painter, 100, Point(520, 185));
-		drawPageText!3(state, painter, text);
+		drawPageText!(3, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide4(ref GameState state, ref Painter painter) {
@@ -283,7 +339,7 @@ pragma(inline, true) {
 			~ "\nthat joines the particles to form a human body.";
 
 		drawApparatus(state, painter, Point(450, 200));
-		drawPageText!4(state, painter, text);
+		drawPageText!(4, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide5(ref GameState state, ref Painter painter) {
@@ -298,7 +354,7 @@ pragma(inline, true) {
 
 		drawEvildoers(state, painter, Point(20, 190));
 		drawApparatus(state, painter, Point(450, 200));
-		drawPageText!5(state, painter, text);
+		drawPageText!(5, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide6(ref GameState state, ref Painter painter) {
@@ -315,7 +371,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji1, Point(245, 160));
 		painter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
 		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
-		drawPageText!6(state, painter, text);
+		drawPageText!(6, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide7(ref GameState state, ref Painter painter) {
@@ -332,7 +388,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji2, 84, Point(259, 258));
 		painter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
 		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
-		drawPageText!7(state, painter, text);
+		drawPageText!(7, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide8(ref GameState state, ref Painter painter) {
@@ -354,7 +410,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(250, 155));
 		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(315, 215));
 		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(300, 245));
-		drawPageText!8(state, painter, text);
+		drawPageText!(8, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide9(ref GameState state, ref Painter painter) {
@@ -368,7 +424,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
 
 		drawAnimatedEarth(state, painter, true);
-		drawPageText!9(state, painter, text);
+		drawPageText!(9, introFirstSlide, introTotalSlides)(state, painter, text);
 	}
 
 	void drawSlide10(ref GameState state, ref Painter painter) {
@@ -379,7 +435,7 @@ pragma(inline, true) {
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
 
 		drawAnimatedEarth(state, painter, true);
-		drawPageText!10(state, painter, text);
+		drawPageText!(10, introFirstSlide, introTotalSlides)(state, painter, text);
 		painter.drawText(seg1, state.assets.fontTextR, 18, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
@@ -388,10 +444,48 @@ pragma(inline, true) {
 
 		drawAnimatedEarth(state, painter, true);
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!11(state, painter, "");
+		drawPageText!(11, introFirstSlide, introTotalSlides)(state, painter, "");
+		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+	}
+
+	void drawSlide12(ref GameState state, ref Painter painter) {
+		static immutable text = "12";
+
+		drawAnimatedEarth(state, painter, true);
+		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		drawPageText!(12, interludeFirstSlide, interludeTotalSlides)(state, painter, "");
+		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+	}
+
+	void drawSlide13(ref GameState state, ref Painter painter) {
+		static immutable text = "13";
+
+		drawAnimatedEarth(state, painter, true);
+		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		drawPageText!(13, interludeFirstSlide, interludeTotalSlides)(state, painter, "");
+		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+	}
+
+	void drawSlide14(ref GameState state, ref Painter painter) {
+		static immutable text = "14";
+
+		drawAnimatedEarth(state, painter, true);
+		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		drawPageText!(14, endingFirstSlide, endingTotalSlides)(state, painter, "");
 		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 }
 
-enum finalSlide = 11;
-enum totalSlides = finalSlide + 1;
+enum introFirstSlide = 0;
+enum introTotalSlides = 12;
+enum introFinalSlide = introTotalSlides - 1;
+
+enum interludeFirstSlide = introFinalSlide + 1;
+enum interludeTotalSlides = 2;
+enum interludeFinalSlide = introFinalSlide + interludeTotalSlides;
+
+enum endingFirstSlide = interludeFinalSlide + 1;
+enum endingTotalSlides = 1;
+enum endingFinalSlide = interludeFinalSlide + endingTotalSlides;
+
+enum totalSlides = endingFinalSlide + 1;

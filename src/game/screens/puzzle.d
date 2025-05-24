@@ -20,12 +20,11 @@ static immutable puzzleScreen = InteractiveScreen(
 	&onInput,
 );
 
-private:
-
 enum defaultSpeed = 200;
 
+private:
+
 void onActivate(ref GameState state) {
-	state.puzzleScreen.speed = defaultSpeed;
 	state.puzzleScreen.ticksCheckpoint = state.ticks.total;
 	state.clickL.reset();
 	handleAudio(state, true);
@@ -49,10 +48,16 @@ void onDraw(ref GameState state) {
 		state.puzzleScreen.ticksCheckpoint = state.ticks.total;
 		state.puzzleScreen.g.tick();
 
-		if (state.puzzleScreen.g.gameComplete) {
-			import game.screens.gg;
+		if (state.puzzleScreen.g.gameCompleteMain && !state.puzzleScreen.gameCompleteMainHandled) {
+			import game.screens.intro;
 
-			state.nextScreen = &ggScreen;
+			state.puzzleScreen.gameCompleteMainHandled = true;
+			state.nextScreen = &introScreen;
+		}
+		else if (state.puzzleScreen.g.gameCompleteBoss) {
+			import game.screens.intro;
+
+			state.nextScreen = &introScreen;
 		}
 
 		handleAudio(state, false);
