@@ -22,6 +22,7 @@ enum Entity : char {
 	rock = '#',
 	hole = 'o',
 	apple = 'a',
+	turtle = 'T',
 	wormhole1 = '1',
 	wormhole2 = '2',
 	wormhole3 = '3',
@@ -49,6 +50,7 @@ bool isWall(Entity entity) {
 
 struct World {
 	Entity[] field;
+	Point[] turtles;
 
 	Entity getEntity(Point gridPos) {
 		const idx = gridPos.linearOffset(grid.width);
@@ -136,13 +138,48 @@ struct PuzzleGame {
 				break;
 			}
 		}
+
+		size_t turtlesCount = 0;
+		foreach (idx, entity; world.field) {
+			if (entity == Entity.turtle) {
+				++turtlesCount;
+			}
+		}
+		if (turtlesCount == 0) {
+			world.turtles = null;
+		}
+		else {
+			if (turtlesCount != world.turtles.length) {
+				// TODO: memory leak
+				auto allocator = Allocator();
+				world.turtles = allocator.makeSlice!Point(turtlesCount);
+			}
+
+			size_t cursor = 0;
+			foreach (idx, ref entity; world.field) {
+				if (entity == Entity.turtle) {
+					entity = Entity.air;
+					world.turtles[cursor] = Point.fromLinearOffset(cast(int) idx, grid.width);
+
+					++cursor;
+					if (cursor == turtlesCount) {
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	void tick() {
 		if (_moved) {
 			this.handleTrigger();
 		}
+
 		_moved = this.movePartner();
+
+		if (_moved) {
+			this.moveTurtles();
+		}
 	}
 
 private:
@@ -207,7 +244,72 @@ private:
 		return true;
 	}
 
+	void moveTurtles() {
+		static void moveTurtle(ref Point pos, World world) {
+			import core.stdc.stdlib : rand;
+
+			const direction = (rand() % 9);
+
+			Point move;
+			if (direction == 0) {
+				move = Point(0, -1);
+			}
+			else if (direction == 1) {
+				move = Point(1, -1);
+			}
+			else if (direction == 2) {
+				move = Point(1, 0);
+			}
+			else if (direction == 3) {
+				move = Point(1, 1);
+			}
+			else if (direction == 4) {
+				move = Point(0, 1);
+			}
+			else if (direction == 5) {
+				move = Point(-1, 1);
+			}
+			else if (direction == 6) {
+				move = Point(-1, 0);
+			}
+			else if (direction == 7) {
+				move = Point(-1, -1);
+			}
+			else {
+				return;
+			}
+
+			const next = pos + move;
+
+			if (
+				(next.x < 0) ||
+				(next.y < 0) ||
+				(next.x >= grid.width) ||
+				(next.y >= grid.height)
+				) {
+				return;
+			}
+
+			if (world.getEntity(next).isWall) {
+				return;
+			}
+
+			pos = next;
+		}
+
+		foreach (ref turtle; world.turtles) {
+			moveTurtle(turtle, world);
+		}
+	}
+
 	void handleTrigger() {
+		foreach (turtle; world.turtles) {
+			if (turtle == partner.pos) {
+				messenger.send("Ouch! Your partner got attacked by a turtle.", MessageType.alert, 3500);
+				return this.loadLevel();
+			}
+		}
+
 		const entity = world.getEntity(partner.pos);
 
 		switch (entity) {
@@ -216,8 +318,7 @@ private:
 
 		case Entity.hole:
 			messenger.send("Ouch! Your partner has fallen into a hole.", MessageType.alert, 3500);
-			this.loadLevel();
-			break;
+			return this.loadLevel();
 
 		case Entity.apple:
 			this.handleApple();
@@ -248,8 +349,7 @@ private:
 			}
 			++level;
 			messenger.send("Level complete. Good job!", MessageType.success);
-			this.loadLevel();
-			break;
+			return this.loadLevel();
 		}
 
 		partner.lastTrigger = entity;

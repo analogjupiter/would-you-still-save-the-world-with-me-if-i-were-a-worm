@@ -34,6 +34,7 @@ static:
 	immutable shakingFace = "🫨";
 	immutable seedling = "🌱";
 	immutable slotMachine = "🎰";
+	immutable turtle = "🐢";
 	immutable waterwave = "🌊";
 	immutable worm = "🪱";
 }

@@ -279,6 +279,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 
 	switch (entity) {
 	case Entity.air:
+	case Entity.turtle:
 	case Entity.partner:
 		break;
 
@@ -359,6 +360,13 @@ void drawPartner(ref GameState state, ref Painter painter) {
 	painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, canvPosPartner);
 }
 
+void drawTurtles(ref GameState state, ref Painter painter) {
+	foreach (gridPosTurtle; state.puzzleScreen.g.world.turtles) {
+		const canvPosTurtle = (gridPosTurtle * gridCell) + offset;
+		painter.drawGlyph(Emoji.turtle.ptr, state.assets.fontEmoji2, canvPosTurtle);
+	}
+}
+
 void drawPin(ref GameState state, ref Painter painter) {
 	const gridPosPin = state.puzzleScreen.g.partner.wormTo;
 	if (state.puzzleScreen.g.partner.wormTo.x >= 0) {
@@ -381,6 +389,7 @@ void drawGameFrame(ref GameState state, ref Painter painter) {
 		++y;
 	}
 
+	drawTurtles(state, painter);
 	drawPartner(state, painter);
 	drawPin(state, painter);
 }
