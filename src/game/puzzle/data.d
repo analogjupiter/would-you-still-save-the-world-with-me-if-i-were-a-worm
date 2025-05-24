@@ -292,7 +292,11 @@ private:
 				return;
 			}
 
-			if (world.getEntity(next).isWall) {
+			const targetEntity = world.getEntity(next);
+			if (
+				targetEntity.isWall
+				|| targetEntity == Entity.turtle
+				) {
 				return;
 			}
 
