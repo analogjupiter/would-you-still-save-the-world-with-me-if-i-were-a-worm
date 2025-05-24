@@ -319,7 +319,7 @@ private:
 
 			++level;
 			if (level <= bossLevel) {
-				messenger.send("Level complete. Good job!", MessageType.success);
+				messenger.send("Level complete. Good job!", MessageType.success, 1000);
 			}
 			return this.loadLevel();
 		}
