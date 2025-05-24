@@ -331,7 +331,7 @@ private:
 		else {
 			foreach (turtle; world.turtles) {
 				if (turtle == partner.pos) {
-					messenger.send("Ouch! Your partner got attacked by a turtle.", MessageType.alert, 3500);
+					messenger.send("Oh no! Your partner got attacked by a turtle.", MessageType.alert, 3500);
 					return this.loadLevel();
 				}
 			}
