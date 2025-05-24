@@ -149,7 +149,7 @@ run: \
 
 ifeq ($(pack_with_upx),yes)
 	$(MAKE) analyize
-	upx -9 $(output_file_build)
+	upx --best --ultra-brute $(output_file_build)
 endif
 
 	@mkdir -p $(target_path)
