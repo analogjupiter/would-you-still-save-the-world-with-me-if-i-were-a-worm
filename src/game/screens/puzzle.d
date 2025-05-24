@@ -48,16 +48,17 @@ void onDraw(ref GameState state) {
 		state.puzzleScreen.ticksCheckpoint = state.ticks.total;
 		state.puzzleScreen.g.tick();
 
-		if (state.puzzleScreen.g.gameCompleteMain && !state.puzzleScreen.gameCompleteMainHandled) {
+		if (state.puzzleScreen.g.gameCompleteBoss) {
 			import game.screens.intro;
 
-			state.puzzleScreen.gameCompleteMainHandled = true;
 			state.nextScreen = &introScreen;
+			return false;
 		}
-		else if (state.puzzleScreen.g.gameCompleteBoss) {
+		if (state.puzzleScreen.g.gameCompleteMain) {
 			import game.screens.intro;
 
 			state.nextScreen = &introScreen;
+			return false;
 		}
 
 		handleAudio(state, false);

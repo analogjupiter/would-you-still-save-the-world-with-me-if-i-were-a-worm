@@ -81,7 +81,6 @@ extern (C) void* gameLoaderImpl(void* gameState) {
 		state.puzzleScreen.g = PuzzleGame.makeNew(state.allocator);
 		state.puzzleScreen.speed = defaultSpeed;
 		state.puzzleScreen.speedMessage = state.allocator.makeSlice!char(24);
-		state.puzzleScreen.gameCompleteMainHandled = false;
 	}
 
 	_done.atomicStore = true;

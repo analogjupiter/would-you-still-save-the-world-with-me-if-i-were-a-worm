@@ -95,5 +95,4 @@ struct PuzzleScreen {
 	char[] speedMessage;
 	ulong ticksCheckpoint;
 	Region previousAudioRegion;
-	bool gameCompleteMainHandled;
 }
