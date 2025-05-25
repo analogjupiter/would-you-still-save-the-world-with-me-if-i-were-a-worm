@@ -3,13 +3,9 @@ module game.emoji;
 struct Emoji {
 static:
 	immutable airplane = "✈️";
-	immutable angryFace = "😠";
-	immutable bullseye = "🎯";
 	immutable chequeredFlag = "🏁";
 	immutable cloudWithRain = "🌧️";
-	immutable clownFace = "🤡";
 	immutable collisionSymbol = "💥";
-	immutable crystalBall = "🔮";
 	immutable cyclone = "🌀";
 	immutable dashSymbol = "💨";
 	immutable dottedLineFace = "🫥";
