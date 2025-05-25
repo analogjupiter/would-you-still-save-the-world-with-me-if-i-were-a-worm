@@ -30,13 +30,13 @@ extern (C) void* gameLoaderImpl(void* gameState) {
 		state.audio = AudioPlayer.makeNew(state);
 
 		static immutable string audioMenu = import("dintro2.mod");
-		state.assets.audioMenu = AudioFile(cast(Chunk) audioMenu, 75);
+		state.assets.audioMenu = AudioFile(cast(Chunk) audioMenu, 70);
 
 		static immutable string audioIntro = import("forestry.mod");
-		state.assets.audioIntro = AudioFile(cast(Chunk) audioIntro, 40);
+		state.assets.audioIntro = AudioFile(cast(Chunk) audioIntro, 35);
 
 		static immutable string audioPuzzle1 = import("not it.mod");
-		state.assets.audioPuzzle1 = AudioFile(cast(Chunk) audioPuzzle1, 70);
+		state.assets.audioPuzzle1 = AudioFile(cast(Chunk) audioPuzzle1, 65);
 
 		static immutable string audioPuzzle2 = import("maandban.xm");
 		state.assets.audioPuzzle2 = AudioFile(cast(Chunk) audioPuzzle2, 100);
