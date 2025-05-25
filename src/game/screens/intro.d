@@ -165,6 +165,10 @@ bool isAnyFirstSlide(ref GameState state) {
 			|| (state.introScreen.slide == endingFirstSlide));
 }
 
+bool isIntro(ref GameState state) {
+	return (state.introScreen.slide <= introFinalSlide);
+}
+
 void drawSlide(ref GameState state) {
 	auto painter = state.framebuffer.makePainter();
 	painter.clear(ColorRGB24(0x21, 0x21, 0x32));
@@ -188,7 +192,7 @@ slideSelection: // @suppress(dscanner.suspicious.unused_label)
 		crashf("No slide %d\n", state.introScreen.slide);
 	}
 
-	const skipText = (state.introScreen.pressedSkipOnce) ? "Are you sure?" : "Skip Intro";
+	const skipText = (state.introScreen.pressedSkipOnce) ? "Are you sure?" : ((isIntro(state)) ? "Skip Intro" : "Skip");
 	const skipColr = (state.introScreen.pressedSkipOnce) ? ColorRGB24(0xFF, 0x99, 0x77) : ColorRGB24(0x9A, 0x9B, 0x9C);
 	const prevColr = ColorRGB24(0xBC, 0xBE, 0xBF);
 	const nextText = (isVeryLastSlide(state)) ? "Continue" : ((isAnyFinalPrePuzzleSlide(state)) ? "Play" : "Next");
