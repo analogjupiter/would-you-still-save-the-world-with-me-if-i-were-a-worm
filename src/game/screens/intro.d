@@ -46,13 +46,11 @@ void onDraw(ref GameState state) {
 
 	state.introScreen.earthTicksCheckpoint = state.ticks.total;
 
-	if (state.introScreen.slide < 9) {
-		return;
+	if ((state.introScreen.slide >= animatedEarthSlideFrom) && (state.introScreen.slide <= animatedEarthSlideTo)) {
+		auto painter = state.framebuffer.makePainter();
+		drawAnimatedEarth(state, painter, false);
+		painter.free();
 	}
-
-	auto painter = state.framebuffer.makePainter();
-	drawAnimatedEarth(state, painter, false);
-	painter.free();
 }
 
 void onInput(ref GameState state, MouseClick input) {
@@ -70,13 +68,13 @@ void onInput(ref GameState state, MouseClick input) {
 			drawSlide(state);
 		}
 		else {
-			if (state.introScreen.slide < introTotalSlides) {
+			if (state.introScreen.slide <= introFinalSlide) {
 				skipIntro(state);
 			}
-			else if (state.introScreen.slide < interludeTotalSlides) {
+			else if (state.introScreen.slide <= interludeFinalSlide) {
 				skipInterlude(state);
 			}
-			else if (state.introScreen.slide < endingTotalSlides) {
+			else if (state.introScreen.slide <= endingFinalSlide) {
 				skipEnding(state);
 			}
 		}
@@ -88,7 +86,7 @@ void onInput(ref GameState state, MouseClick input) {
 		}
 
 		if (buttonPrev.contains(input.pos)) {
-			if (state.introScreen.slide == 0) {
+			if (state.isAnyFirstSlide) {
 				return;
 			}
 
@@ -198,7 +196,7 @@ slideSelection: // @suppress(dscanner.suspicious.unused_label)
 
 	state.assets.fontTextM.size = 16;
 	painter.drawText(skipText, state.assets.fontTextM, buttonTextColor, Point(10, 335));
-	if (state.introScreen.slide > 0) {
+	if (!state.isAnyFirstSlide) {
 		painter.drawText("Prev", state.assets.fontTextM, buttonTextColor, Point(130, 335));
 	}
 	painter.drawText(nextText, state.assets.fontTextM, buttonTextColor, Point(350, 335));
@@ -471,39 +469,82 @@ pragma(inline, true) {
 	}
 
 	void drawSlide12(ref GameState state, ref Painter painter) {
-		static immutable text = "12";
+		static immutable text =
+			"You and your partner have reached the end of the world."
+			~ "\n"
+			~ "\nHappy to have made it past all these turtles, you two bump into a guy."
+			~ "\n“I’m Joseph, Man of Steel. Who are you?” he introduces himself and twirls"
+			~ "\nhis mustache. You explain your situation and, eventually, he agrees to help"
+			~ "\nyou."
+			~ "\n"
+			~ "\nA moment later you find yourself waiting for the second world’s very best"
+			~ "\nscientists working on building an apparatus that ought to make things go"
+			~ "\nback to normal. They make quick progress and soon or later their work is"
+			~ "\nall set and done.";
 
-		drawAnimatedEarth(state, painter, true);
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(12, Chapter.interlude)(state, painter, "");
-		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+		drawPageText!(12, Chapter.interlude)(state, painter, text);
 	}
 
 	void drawSlide13(ref GameState state, ref Painter painter) {
-		static immutable text = "13";
+		static immutable text =
+			"Your partner thanks them for their hard work and you join the chorus."
+			~ "\n"
+			~ "\nTheir machine starts and proceeds to open another huge wormhole."
+			~ "\nWith a word of warning they bid you farewell while Earth once again"
+			~ "\nfalls through a wormhole.";
 
-		drawAnimatedEarth(state, painter, true);
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(13, Chapter.interlude)(state, painter, "");
-		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+
+		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(250, 190));
+		painter.drawGlyph(Emoji.cyclone.ptr, state.assets.fontEmoji2, 10, Point(315, 280));
+		painter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, Point(250, 150));
+
+		drawPageText!(13, Chapter.interlude)(state, painter, text);
 	}
 
 	void drawSlide14(ref GameState state, ref Painter painter) {
-		static immutable text = "14";
+		static immutable text =
+			"Thanks to the help of “our” friend from the past, you and the whole globe"
+			~ "\nhave made it back home. Land masses are back intact, the oceans flow as"
+			~ "\nusual."
+			~ "\n"
+			~ "\nUnfortunately, there are two oddities left to be resolved:"
+			~ "\nToothbrush-Moustache Man is haunting the world in his newly found"
+			~ "\nundead presence. And your partner"
+			~ "\nis still a worm.";
 
-		drawAnimatedEarth(state, painter, true);
+		drawPageText!(14, Chapter.interlude)(state, painter, text);
+
+		enum promptPos = textPos + Point(0, 190);
+		static immutable promptText = "This is our final fight.\nAre you ready?";
+		painter.drawText(promptText, state.assets.fontTextM, 24, ColorRGB24(0x00, 0xFF, 0x66), promptPos);
+
+		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(450, 160));
+		painter.drawGlyph(Emoji.earthGlobeEuropeAfrica.ptr, state.assets.fontEmoji1, Point(300, 180));
+		drawToothbrushMustacheMan(state, painter, 50, Point(350, 200));
+	}
+
+	void drawSlide15(ref GameState state, ref Painter painter) {
+		static immutable text =
+			"Sweet Victory!"
+			~ "\n"
+			~ "\nToothbrush-Moustache Man has been defeated for good."
+			~ "\nYour partner is back to their human-form, just as “our” friend from the past promised.";
+
 		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(14, Chapter.ending)(state, painter, "");
+		drawPageText!(15, Chapter.ending)(state, painter, text);
 		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 }
+
+enum animatedEarthSlideFrom = 9;
+enum animatedEarthSlideTo = 11;
 
 enum introFirstSlide = 0;
 enum introTotalSlides = 12;
 enum introFinalSlide = introTotalSlides - 1;
 
 enum interludeFirstSlide = introFinalSlide + 1;
-enum interludeTotalSlides = 2;
+enum interludeTotalSlides = 3;
 enum interludeFinalSlide = introFinalSlide + interludeTotalSlides;
 
 enum endingFirstSlide = interludeFinalSlide + 1;
