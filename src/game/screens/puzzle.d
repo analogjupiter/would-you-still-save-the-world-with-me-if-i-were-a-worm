@@ -26,6 +26,7 @@ private:
 
 void onActivate(ref GameState state) {
 	state.puzzleScreen.ticksCheckpoint = state.ticks.total;
+	state.puzzleScreen.circleTicksCheckpoint = state.ticks.total;
 	state.clickL.reset();
 	handleAudio(state, true);
 	state.puzzleScreen.g.messenger.tick(state.ticks.total);
@@ -383,6 +384,34 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 void drawPartner(ref GameState state, ref Painter painter) {
 	const gridPosPartner = state.puzzleScreen.g.partner.pos;
 	const canvPosPartner = (gridPosPartner * gridCell) + offset;
+
+	enum boxHalf = (gridCell >> 1);
+	const canvPosCircle = canvPosPartner + boxHalf;
+	enum diamtr = (gridCell.x + (gridCell.x >> 1));
+	enum radius = (diamtr >> 1);
+
+	const deltaCircleTicks = state.ticks.total - state.puzzleScreen.circleTicksCheckpoint;
+	if (deltaCircleTicks > 10) {
+		state.puzzleScreen.circleTicksCheckpoint = state.ticks.total;
+
+		if (state.puzzleScreen.circleIntensityUp) {
+			++state.puzzleScreen.circleIntensity;
+			if (state.puzzleScreen.circleIntensity >= 0x50) {
+				state.puzzleScreen.circleIntensityUp = false;
+			}
+		}
+		else {
+			--state.puzzleScreen.circleIntensity;
+			if (state.puzzleScreen.circleIntensity <= 0x01) {
+				state.puzzleScreen.circleIntensityUp = true;
+			}
+		}
+	}
+
+	const intensity = state.puzzleScreen.circleIntensity / 255.0f;
+	const circleColor = ColorRGBA128F(1, 1, 1, intensity);
+	painter.drawCircle(circleColor, radius, canvPosCircle);
+
 	painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, canvPosPartner);
 }
 

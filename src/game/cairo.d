@@ -3,6 +3,8 @@ module game.cairo;
 import game.geometry;
 import libpangocairo_2;
 
+private enum M_PI = 3.14159265358979323846;
+
 int bytesPerPixel(cairo_format_t format) {
 	switch (format) {
 	case CAIRO_FORMAT_ARGB32:
@@ -203,6 +205,12 @@ struct Painter {
 
 	void drawRectangle(ColorRGBA128F color, Size size, Point pos) {
 		cairo_rectangle(_cr, pos.x, pos.y, size.width, size.height);
+		color.setAsSource(_cr);
+		cairo_fill(_cr);
+	}
+
+	void drawCircle(ColorRGBA128F color, double radius, Point pos) {
+		cairo_arc(_cr, pos.x, pos.y, radius, 0.0, 2.0 * M_PI);
 		color.setAsSource(_cr);
 		cairo_fill(_cr);
 	}

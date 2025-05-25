@@ -82,6 +82,8 @@ extern (C) void* gameLoaderImpl(void* gameState) {
 		state.puzzleScreen.speed = defaultSpeed;
 		state.puzzleScreen.speedMessage = state.allocator.makeSlice!char(24);
 		state.puzzleScreen.gameCompleteMainHandled = false;
+		state.puzzleScreen.circleIntensity = 0;
+		state.puzzleScreen.circleIntensityUp = true;
 	}
 
 	_done.atomicStore = true;

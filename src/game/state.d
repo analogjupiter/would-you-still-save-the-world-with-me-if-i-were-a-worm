@@ -96,4 +96,8 @@ struct PuzzleScreen {
 	ulong ticksCheckpoint;
 	Region previousAudioRegion;
 	bool gameCompleteMainHandled;
+
+	ulong circleTicksCheckpoint;
+	ubyte circleIntensity;
+	bool circleIntensityUp;
 }
