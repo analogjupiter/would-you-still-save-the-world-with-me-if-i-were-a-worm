@@ -26,6 +26,7 @@ static:
 	immutable manLightSkinTone = "👨🏻";
 	immutable moon = "🌙";
 	immutable orange = "🍊";
+	immutable partyPopper = "🎉";
 	immutable poutingFace = "😡";
 	immutable redApple = "🍎";
 	immutable radioactiveSign = "☢️";

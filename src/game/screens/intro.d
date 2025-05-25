@@ -154,6 +154,10 @@ bool isAnyFinalPrePuzzleSlide(ref GameState state) {
 			|| (state.introScreen.slide == interludeFinalSlide));
 }
 
+bool isVeryLastSlide(ref GameState state) {
+	return state.introScreen.slide == endingFinalSlide;
+}
+
 bool isAnyFirstSlide(ref GameState state) {
 	return (
 		(state.introScreen.slide == introFirstSlide)
@@ -187,7 +191,7 @@ slideSelection: // @suppress(dscanner.suspicious.unused_label)
 	const skipText = (state.introScreen.pressedSkipOnce) ? "Are you sure?" : "Skip Intro";
 	const skipColr = (state.introScreen.pressedSkipOnce) ? ColorRGB24(0xFF, 0x99, 0x77) : ColorRGB24(0x9A, 0x9B, 0x9C);
 	const prevColr = ColorRGB24(0xBC, 0xBE, 0xBF);
-	const nextText = (isAnyFinalPrePuzzleSlide(state)) ? "Play" : "Next";
+	const nextText = (isVeryLastSlide(state)) ? "Continue" : ((isAnyFinalPrePuzzleSlide(state)) ? "Play" : "Next");
 	const nextColr = (isAnyFinalSlide(state)) ? ColorRGB24(0x00, 0xFF, 0x99) : ColorRGB24(0xDD, 0xDE, 0xDF);
 
 	painter.drawRectangle(skipColr, buttonSkip.size, buttonSkip.upperLeft);
@@ -493,7 +497,6 @@ pragma(inline, true) {
 			~ "\nWith a word of warning they bid you farewell while Earth once again"
 			~ "\nfalls through a wormhole.";
 
-
 		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(250, 190));
 		painter.drawGlyph(Emoji.cyclone.ptr, state.assets.fontEmoji2, 10, Point(315, 280));
 		painter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, Point(250, 150));
@@ -528,11 +531,14 @@ pragma(inline, true) {
 			"Sweet Victory!"
 			~ "\n"
 			~ "\nToothbrush-Moustache Man has been defeated for good."
-			~ "\nYour partner is back to their human-form, just as “our” friend from the past promised.";
+			~ "\nYour partner is back to their human-form — just as “our” friend from the"
+			~ "\npast has promised."
+			~ "\n"
+			~ "\nWith a smirk on their face, your partner tries to ask you one more time,"
+			~ "\n“Would you still…”";
 
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		painter.drawGlyph(Emoji.partyPopper.ptr, state.assets.fontEmoji1, Point(265, 190));
 		drawPageText!(15, Chapter.ending)(state, painter, text);
-		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 }
 

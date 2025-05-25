@@ -1,7 +1,9 @@
 module game.screens.gg;
 
 import game.cairo;
+import game.emoji;
 import game.geometry;
+import game.glyph;
 import game.interactive;
 import game.memory;
 import game.pango;
@@ -29,6 +31,8 @@ void onActivate(ref GameState state) {
 
 	painter.drawRectangle(ColorRGBA128F(0, 0, 0, 0.75), Size(state.width, 200), Point(0, 0));
 	painter.drawRectangle(ColorRGBA128F(1, 1, 1, 0.75), Size(state.width, 50), Point(0, 200));
+
+	painter.drawGlyph(Emoji.partyPopper.ptr, state.assets.fontEmoji1, Point(20, 210));
 
 	painter.drawText(
 		"Yes!",
