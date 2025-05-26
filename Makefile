@@ -56,6 +56,10 @@ LDC2 ?= $(default_compiler)
 
 ### Compiler Flags
 DFLAGS ?= \
+	--release \
+	--boundscheck=off \
+	--checkaction=halt \
+	\
 	-betterC \
 	-Oz \
 	-defaultlib=druntime-ldc-lto \
