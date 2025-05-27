@@ -90,11 +90,14 @@ struct PuzzleGame {
 	}
 
 	private {
+		Allocator* _allocator;
 		bool _moved;
 	}
 
-	static PuzzleGame makeNew(ref Allocator allocator) {
+	static PuzzleGame makeNew(Allocator* allocator) {
 		auto pg = PuzzleGame();
+
+		pg._allocator = allocator;
 
 		pg.gameCompleteMain = false;
 		pg.gameCompleteBoss = false;
@@ -163,9 +166,7 @@ struct PuzzleGame {
 		}
 		else {
 			if (turtlesCount != world.turtles.length) {
-				// TODO: memory leak
-				auto allocator = Allocator();
-				world.turtles = allocator.makeSlice!Point(turtlesCount);
+				world.turtles = _allocator.makeSlice!Point(turtlesCount);
 			}
 
 			size_t cursor = 0;
