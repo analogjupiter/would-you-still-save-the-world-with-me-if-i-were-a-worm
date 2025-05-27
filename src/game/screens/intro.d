@@ -47,9 +47,7 @@ void onDraw(ref GameState state) {
 	state.introScreen.earthTicksCheckpoint = state.ticks.total;
 
 	if ((state.introScreen.slide >= animatedEarthSlideFrom) && (state.introScreen.slide <= animatedEarthSlideTo)) {
-		auto painter = state.framebuffer.makePainter();
-		drawAnimatedEarth(state, painter, false);
-		painter.free();
+		drawAnimatedEarth(state, false);
 	}
 }
 
@@ -170,16 +168,15 @@ bool isIntro(ref GameState state) {
 }
 
 void drawSlide(ref GameState state) {
-	auto painter = state.framebuffer.makePainter();
-	painter.clear(ColorRGB24(0x21, 0x21, 0x32));
+	state.framebufferPainter.clear(ColorRGB24(0x21, 0x21, 0x32));
 
 	version (none) {
-		painter.drawRectangle(ColorRGB24(0xFF, 0x00, 0x99), Size(20, 360), Point(620, 0));
+		state.framebufferPainter.drawRectangle(ColorRGB24(0xFF, 0x00, 0x99), Size(20, 360), Point(620, 0));
 	}
 
 	enum switchCase(int slideIdx) =
 		`case ` ~ slideIdx.stringof ~ `:`
-		~ `drawSlide` ~ slideIdx.stringof ~ `(state, painter);`
+		~ `drawSlide` ~ slideIdx.stringof ~ `(state);`
 		~ `break slideSelection;`;
 
 slideSelection: // @suppress(dscanner.suspicious.unused_label)
@@ -198,36 +195,35 @@ slideSelection: // @suppress(dscanner.suspicious.unused_label)
 	const nextText = (isVeryLastSlide(state)) ? "Continue" : ((isAnyFinalPrePuzzleSlide(state)) ? "Play" : "Next");
 	const nextColr = (isAnyFinalSlide(state)) ? ColorRGB24(0x00, 0xFF, 0x99) : ColorRGB24(0xDD, 0xDE, 0xDF);
 
-	painter.drawRectangle(skipColr, buttonSkip.size, buttonSkip.upperLeft);
-	painter.drawRectangle(prevColr, buttonPrev.size, buttonPrev.upperLeft);
-	painter.drawRectangle(nextColr, buttonNext.size, buttonNext.upperLeft);
+	state.framebufferPainter.drawRectangle(skipColr, buttonSkip.size, buttonSkip.upperLeft);
+	state.framebufferPainter.drawRectangle(prevColr, buttonPrev.size, buttonPrev.upperLeft);
+	state.framebufferPainter.drawRectangle(nextColr, buttonNext.size, buttonNext.upperLeft);
 
 	state.assets.fontTextM.size = 16;
-	painter.drawText(skipText, state.assets.fontTextM, buttonTextColor, Point(10, 335));
+	state.framebufferPainter.drawText(skipText, state.assets.fontTextM, buttonTextColor, Point(10, 335));
 	if (!state.isAnyFirstSlide) {
-		painter.drawText("Prev", state.assets.fontTextM, buttonTextColor, Point(130, 335));
+		state.framebufferPainter.drawText("Prev", state.assets.fontTextM, buttonTextColor, Point(130, 335));
 	}
-	painter.drawText(nextText, state.assets.fontTextM, buttonTextColor, Point(350, 335));
-	painter.free();
+	state.framebufferPainter.drawText(nextText, state.assets.fontTextM, buttonTextColor, Point(350, 335));
 }
 
-void drawAnimatedEarth(ref GameState state, ref Painter painter, bool keepState) {
+void drawAnimatedEarth(ref GameState state, bool keepState) {
 	pragma(inline, true);
 	static import game.screens.common;
 
 	immutable pos = Point(230, 150);
-	game.screens.common.drawAnimatedEarth(state, painter, state.introScreen.earth, pos, keepState);
+	game.screens.common.drawAnimatedEarth(state, state.introScreen.earth, pos, keepState);
 }
 
-void drawEvildoers(ref GameState state, ref Painter painter, Point pos) {
+void drawEvildoers(ref GameState state, Point pos) {
 	const posDotted = Point(pos.x, pos.y + 15);
 	const posFriend = Point(pos.x + 125, pos.y);
-	painter.drawGlyph(Emoji.orange.ptr, state.assets.fontEmoji1, pos);
-	painter.drawGlyph(Emoji.dottedLineFace.ptr, state.assets.fontEmoji1, posDotted);
-	painter.drawGlyph(Emoji.manLightSkinTone.ptr, state.assets.fontEmoji1, posFriend);
+	state.framebufferPainter.drawGlyph(Emoji.orange.ptr, state.assets.fontEmoji1, pos);
+	state.framebufferPainter.drawGlyph(Emoji.dottedLineFace.ptr, state.assets.fontEmoji1, posDotted);
+	state.framebufferPainter.drawGlyph(Emoji.manLightSkinTone.ptr, state.assets.fontEmoji1, posFriend);
 }
 
-void drawWaves(ref GameState state, ref Painter painter) {
+void drawWaves(ref GameState state) {
 	enum waveSize = 30;
 	foreach (n; 0 .. (state.width / waveSize)) {
 		enum drownIntoGUI = 4;
@@ -235,17 +231,17 @@ void drawWaves(ref GameState state, ref Painter painter) {
 		const x = xOffset + (n * waveSize);
 		enum y = buttonNext.top - waveSize + drownIntoGUI;
 
-		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, waveSize, Point(x, y));
+		state.framebufferPainter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, waveSize, Point(x, y));
 	}
 }
 
-void drawApparatus(ref GameState state, ref Painter painter, Point pos) {
+void drawApparatus(ref GameState state, Point pos) {
 	const posFax = Point(pos.x, pos.y + 10);
 	const posSlut = Point(pos.x + 42, pos.y);
 	const posSign = Point(pos.x + 51, pos.y + 105);
-	painter.drawGlyph(Emoji.faxMachine.ptr, state.assets.fontEmoji1, posFax);
-	painter.drawGlyph(Emoji.slotMachine.ptr, state.assets.fontEmoji1, posSlut);
-	painter.drawGlyph(Emoji.radioactiveSign.ptr, state.assets.fontEmoji2, 16, posSign);
+	state.framebufferPainter.drawGlyph(Emoji.faxMachine.ptr, state.assets.fontEmoji1, posFax);
+	state.framebufferPainter.drawGlyph(Emoji.slotMachine.ptr, state.assets.fontEmoji1, posSlut);
+	state.framebufferPainter.drawGlyph(Emoji.radioactiveSign.ptr, state.assets.fontEmoji2, 16, posSign);
 }
 
 enum Chapter {
@@ -256,7 +252,7 @@ enum Chapter {
 
 pragma(inline, true) {
 
-	void drawPageText(int pageIdx, Chapter chapter)(ref GameState state, ref Painter painter, string text) {
+	void drawPageText(int pageIdx, Chapter chapter)(ref GameState state, string text) {
 		static if (chapter == Chapter.intro) {
 			enum first = introFirstSlide;
 			enum total = introTotalSlides;
@@ -277,11 +273,11 @@ pragma(inline, true) {
 		enum pageNo = pageNoInt.stringof;
 		static immutable page = "Page " ~ pageNo ~ " of " ~ total.stringof ~ " — " ~ name;
 
-		painter.drawText(page, state.assets.fontTextM, 12, pageColor, pagePos);
-		painter.drawText(text, state.assets.fontTextR, 18, textColor, textPos);
+		state.framebufferPainter.drawText(page, state.assets.fontTextM, 12, pageColor, pagePos);
+		state.framebufferPainter.drawText(text, state.assets.fontTextR, 18, textColor, textPos);
 	}
 
-	void drawSlide0(ref GameState state, ref Painter painter) {
+	void drawSlide0(ref GameState state) {
 		enum titleChomped = state.gameTitle[0 .. ($ - 1)];
 		static immutable text =
 			"Welcome to “" ~ titleChomped ~ "”."
@@ -294,12 +290,12 @@ pragma(inline, true) {
 			~ "\nother, laughing about stories from the past, discussing your plans for"
 			~ "\nthe future.";
 
-		painter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
-		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
-		drawPageText!(0, Chapter.intro)(state, painter, text);
+		state.framebufferPainter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
+		state.framebufferPainter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
+		drawPageText!(0, Chapter.intro)(state, text);
 	}
 
-	void drawSlide1(ref GameState state, ref Painter painter) {
+	void drawSlide1(ref GameState state) {
 		static immutable text =
 			"\n\n"
 			~ "\nThe rain patters gently against windows and windowsills, accompanying"
@@ -311,13 +307,13 @@ pragma(inline, true) {
 			~ "\n"
 			~ "\n“Would you still love me if I were a worm?” your partner asks.";
 
-		painter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, 24, Point(540, 245));
-		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
-		drawPageText!(1, Chapter.intro)(state, painter, text);
+		state.framebufferPainter.drawGlyph(Emoji.cloudWithRain.ptr, state.assets.fontEmoji2, 24, Point(20, 70));
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, 24, Point(540, 245));
+		state.framebufferPainter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji1, Point(500, 190));
+		drawPageText!(1, Chapter.intro)(state, text);
 	}
 
-	void drawSlide2(ref GameState state, ref Painter painter) {
+	void drawSlide2(ref GameState state) {
 		static immutable text =
 			"Meanwhile in a different place…"
 			~ "\n"
@@ -326,14 +322,14 @@ pragma(inline, true) {
 			~ "\nwell-known politician, the Orange, and his immigrant friend who have"
 			~ "\njoined forces to put an end to all immigration. Gotta deport ’em all!";
 
-		drawWaves(state, painter);
-		painter.drawGlyph(Emoji.airplane.ptr, state.assets.fontEmoji2, 48, Point(90, 200));
-		painter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji2, 48, Point(170, 180));
-		drawEvildoers(state, painter, Point(365, 170));
-		drawPageText!(2, Chapter.intro)(state, painter, text);
+		drawWaves(state);
+		state.framebufferPainter.drawGlyph(Emoji.airplane.ptr, state.assets.fontEmoji2, 48, Point(90, 200));
+		state.framebufferPainter.drawGlyph(Emoji.moon.ptr, state.assets.fontEmoji2, 48, Point(170, 180));
+		drawEvildoers(state, Point(365, 170));
+		drawPageText!(2, Chapter.intro)(state, text);
 	}
 
-	void drawSlide3(ref GameState state, ref Painter painter) {
+	void drawSlide3(ref GameState state) {
 		static immutable text =
 			"Accompanied by a team of the world’s greatest scientists — all volunteers"
 			~ "\nwho did definitely not receive no threats of being sent to Alcatraz — they"
@@ -348,12 +344,12 @@ pragma(inline, true) {
 			~ "\ncriminal’s body as needed for the mission, the plane starts"
 			~ "\nits final descent.";
 
-		drawWaves(state, painter);
-		drawToothbrushMustacheMan(state, painter, 100, Point(520, 185));
-		drawPageText!(3, Chapter.intro)(state, painter, text);
+		drawWaves(state);
+		drawToothbrushMustacheMan(state, 100, Point(520, 185));
+		drawPageText!(3, Chapter.intro)(state, text);
 	}
 
-	void drawSlide4(ref GameState state, ref Painter painter) {
+	void drawSlide4(ref GameState state) {
 		static immutable text =
 			"Disregarding all laws concerning the violation of graves, the Orange and"
 			~ "\nhis Team go on a torch-lit walk to retrieve the ashes of"
@@ -366,11 +362,11 @@ pragma(inline, true) {
 			~ "\nmatter is then fed into a fusion-reactor gene-gun combo"
 			~ "\nthat joines the particles to form a human body.";
 
-		drawApparatus(state, painter, Point(450, 200));
-		drawPageText!(4, Chapter.intro)(state, painter, text);
+		drawApparatus(state, Point(450, 200));
+		drawPageText!(4, Chapter.intro)(state, text);
 	}
 
-	void drawSlide5(ref GameState state, ref Painter painter) {
+	void drawSlide5(ref GameState state) {
 		static immutable text =
 			"The team mounts fills the collected remains into an ash tray and mounts it"
 			~ "\non the machinery. After a routine check, the apparatus gets finally turned"
@@ -380,29 +376,29 @@ pragma(inline, true) {
 			~ "\nAfter hours of waiting, results are coming in: Everything looks good so far."
 			~ "\nThe Orange and his friend are happy about their achievement.";
 
-		drawEvildoers(state, painter, Point(20, 190));
-		drawApparatus(state, painter, Point(450, 200));
-		drawPageText!(5, Chapter.intro)(state, painter, text);
+		drawEvildoers(state, Point(20, 190));
+		drawApparatus(state, Point(450, 200));
+		drawPageText!(5, Chapter.intro)(state, text);
 	}
 
-	void drawSlide6(ref GameState state, ref Painter painter) {
+	void drawSlide6(ref GameState state) {
 		static immutable text =
 			"All of a sudden, the bizarre appartus goes up in smoke."
 			~ "\nThe particle accelerator implodes."
 			~ "\nThe whole situation gets out of control."
 			~ "\nPanic sets in.";
 
-		//drawApparatus(state, painter, Point(200, 160));
-		drawApparatus(state, painter, Point(220, 180));
-		painter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji2, 84, Point(210, 170));
-		painter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji2, 84, Point(320, 140));
-		painter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji1, Point(245, 160));
-		painter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
-		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
-		drawPageText!(6, Chapter.intro)(state, painter, text);
+		//drawApparatus(state, Point(200, 160));
+		drawApparatus(state, Point(220, 180));
+		state.framebufferPainter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji2, 84, Point(210, 170));
+		state.framebufferPainter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji2, 84, Point(320, 140));
+		state.framebufferPainter.drawGlyph(Emoji.fire.ptr, state.assets.fontEmoji1, Point(245, 160));
+		state.framebufferPainter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
+		state.framebufferPainter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
+		drawPageText!(6, Chapter.intro)(state, text);
 	}
 
-	void drawSlide7(ref GameState state, ref Painter painter) {
+	void drawSlide7(ref GameState state) {
 		static immutable text =
 			"When smoke and dust finally settle, the team gets a chance to look at"
 			~ "\nthe wreckage that used to be their machine. A good chunk of the"
@@ -412,36 +408,36 @@ pragma(inline, true) {
 			~ "\nalready absorbed large parts of the apparatus. And it proceeds to absorb"
 			~ "\nwhatever comes near it. “That is…?” — “Eventually the whole planet!”";
 
-		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(230, 190));
-		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji2, 84, Point(259, 258));
-		painter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
-		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
-		drawPageText!(7, Chapter.intro)(state, painter, text);
+		state.framebufferPainter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(230, 190));
+		state.framebufferPainter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji2, 84, Point(259, 258));
+		state.framebufferPainter.drawGlyph(Emoji.dashSymbol.ptr, state.assets.fontEmoji1, Point(400, 190));
+		state.framebufferPainter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(25, 190));
+		drawPageText!(7, Chapter.intro)(state, text);
 	}
 
-	void drawSlide8(ref GameState state, ref Painter painter) {
+	void drawSlide8(ref GameState state) {
 		static immutable text =
 			"During its travel through the wormhole, Earth is shaken and deformed."
 			~ "\nIts oceans are stirred up, volcanos turn inside out.";
 
-		drawToothbrushMustacheMan(state, painter, 20, Point(335, 160));
-		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(230, 190));
-		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji2, 84, Point(259, 258));
-		painter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, Point(230, 150));
-		painter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(400, 190));
-		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 10, Point(240, 200));
-		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 12, Point(260, 235));
-		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 7, Point(280, 255));
-		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 10, Point(300, 180));
-		painter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 9, Point(330, 210));
-		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(260, 200));
-		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(250, 155));
-		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(315, 215));
-		painter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(300, 245));
-		drawPageText!(8, Chapter.intro)(state, painter, text);
+		drawToothbrushMustacheMan(state, 20, Point(335, 160));
+		state.framebufferPainter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(230, 190));
+		state.framebufferPainter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji2, 84, Point(259, 258));
+		state.framebufferPainter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, Point(230, 150));
+		state.framebufferPainter.drawGlyph(Emoji.shakingFace.ptr, state.assets.fontEmoji1, Point(400, 190));
+		state.framebufferPainter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 10, Point(240, 200));
+		state.framebufferPainter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 12, Point(260, 235));
+		state.framebufferPainter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 7, Point(280, 255));
+		state.framebufferPainter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 10, Point(300, 180));
+		state.framebufferPainter.drawGlyph(Emoji.waterwave.ptr, state.assets.fontEmoji2, 9, Point(330, 210));
+		state.framebufferPainter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(260, 200));
+		state.framebufferPainter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(250, 155));
+		state.framebufferPainter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(315, 215));
+		state.framebufferPainter.drawGlyph(Emoji.collisionSymbol.ptr, state.assets.fontEmoji2, 20, Point(300, 245));
+		drawPageText!(8, Chapter.intro)(state, text);
 	}
 
-	void drawSlide9(ref GameState state, ref Painter painter) {
+	void drawSlide9(ref GameState state) {
 		static immutable text =
 			"After a while Earth reaches its new location in a galaxy far, far away…"
 			~ "\n"
@@ -449,34 +445,34 @@ pragma(inline, true) {
 			~ "\nSkywalker, Leia Organa, Padmé Amidala, Darth Vader or dichotomy in"
 			~ "\nsight. — However it looks like your partner has turned into, well, a worm!";
 
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
 
-		drawAnimatedEarth(state, painter, true);
-		drawPageText!(9, Chapter.intro)(state, painter, text);
+		drawAnimatedEarth(state, true);
+		drawPageText!(9, Chapter.intro)(state, text);
 	}
 
-	void drawSlide10(ref GameState state, ref Painter painter) {
+	void drawSlide10(ref GameState state) {
 		static immutable seg1 = "“" ~ state.gameTitle ~ "”";
 		static immutable seg2 = " your partner\nasks you once again.";
 		static immutable text = seg1 ~ seg2;
 
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
 
-		drawAnimatedEarth(state, painter, true);
-		drawPageText!(10, Chapter.intro)(state, painter, text);
-		painter.drawText(seg1, state.assets.fontTextR, 18, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+		drawAnimatedEarth(state, true);
+		drawPageText!(10, Chapter.intro)(state, text);
+		state.framebufferPainter.drawText(seg1, state.assets.fontTextR, 18, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
-	void drawSlide11(ref GameState state, ref Painter painter) {
+	void drawSlide11(ref GameState state) {
 		static immutable text = "Are you ready?";
 
-		drawAnimatedEarth(state, painter, true);
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
-		drawPageText!(11, Chapter.intro)(state, painter, "");
-		painter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
+		drawAnimatedEarth(state, true);
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(400, 150));
+		drawPageText!(11, Chapter.intro)(state, "");
+		state.framebufferPainter.drawText(text, state.assets.fontTextR, 72, ColorRGB24(0x00, 0xFF, 0x66), textPos);
 	}
 
-	void drawSlide12(ref GameState state, ref Painter painter) {
+	void drawSlide12(ref GameState state) {
 		static immutable text =
 			"You and your partner have reached the end of the world."
 			~ "\n"
@@ -490,10 +486,10 @@ pragma(inline, true) {
 			~ "\nback to normal. They make quick progress and soon or later their work is"
 			~ "\nall set and done.";
 
-		drawPageText!(12, Chapter.interlude)(state, painter, text);
+		drawPageText!(12, Chapter.interlude)(state, text);
 	}
 
-	void drawSlide13(ref GameState state, ref Painter painter) {
+	void drawSlide13(ref GameState state) {
 		static immutable text =
 			"Your partner thanks them for their hard work and you join the chorus."
 			~ "\n"
@@ -501,14 +497,14 @@ pragma(inline, true) {
 			~ "\nWith a word of warning they bid you farewell while Earth once again"
 			~ "\nfalls through a wormhole.";
 
-		painter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(250, 190));
-		painter.drawGlyph(Emoji.cyclone.ptr, state.assets.fontEmoji2, 10, Point(315, 280));
-		painter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, Point(250, 150));
+		state.framebufferPainter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(250, 190));
+		state.framebufferPainter.drawGlyph(Emoji.cyclone.ptr, state.assets.fontEmoji2, 10, Point(315, 280));
+		state.framebufferPainter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, Point(250, 150));
 
-		drawPageText!(13, Chapter.interlude)(state, painter, text);
+		drawPageText!(13, Chapter.interlude)(state, text);
 	}
 
-	void drawSlide14(ref GameState state, ref Painter painter) {
+	void drawSlide14(ref GameState state) {
 		static immutable text =
 			"Thanks to the help of “our” friend from the past, you and the whole globe"
 			~ "\nhave made it back home. Land masses are back intact, the oceans flow as"
@@ -519,18 +515,18 @@ pragma(inline, true) {
 			~ "\nundead presence. And your partner"
 			~ "\nis still a worm.";
 
-		drawPageText!(14, Chapter.interlude)(state, painter, text);
+		drawPageText!(14, Chapter.interlude)(state, text);
 
 		enum promptPos = textPos + Point(0, 190);
 		static immutable promptText = "This is our final fight.\nAre you ready?";
-		painter.drawText(promptText, state.assets.fontTextM, 24, ColorRGB24(0x00, 0xFF, 0x66), promptPos);
+		state.framebufferPainter.drawText(promptText, state.assets.fontTextM, 24, ColorRGB24(0x00, 0xFF, 0x66), promptPos);
 
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(450, 160));
-		painter.drawGlyph(Emoji.earthGlobeEuropeAfrica.ptr, state.assets.fontEmoji1, Point(300, 180));
-		drawToothbrushMustacheMan(state, painter, 50, Point(350, 200));
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(450, 160));
+		state.framebufferPainter.drawGlyph(Emoji.earthGlobeEuropeAfrica.ptr, state.assets.fontEmoji1, Point(300, 180));
+		drawToothbrushMustacheMan(state, 50, Point(350, 200));
 	}
 
-	void drawSlide15(ref GameState state, ref Painter painter) {
+	void drawSlide15(ref GameState state) {
 		static immutable text =
 			"Sweet Victory!"
 			~ "\n"
@@ -541,8 +537,8 @@ pragma(inline, true) {
 			~ "\nWith a smirk on their face, your partner tries to ask you one more time,"
 			~ "\n“Would you still…”";
 
-		painter.drawGlyph(Emoji.partyPopper.ptr, state.assets.fontEmoji1, Point(265, 190));
-		drawPageText!(15, Chapter.ending)(state, painter, text);
+		state.framebufferPainter.drawGlyph(Emoji.partyPopper.ptr, state.assets.fontEmoji1, Point(265, 190));
+		drawPageText!(15, Chapter.ending)(state, text);
 	}
 }
 

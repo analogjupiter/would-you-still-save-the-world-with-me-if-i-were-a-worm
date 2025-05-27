@@ -45,21 +45,27 @@ void onActivate(ref GameState state) {
 	}
 
 	{
-		auto painter = state.framebuffer.makePainter();
+		state.framebufferPainter.drawRectangle(ColorRGBA128F(0, 0, 0, 0.75), Size(state.width - 20, 44), Point(10, 10));
+		state.framebufferPainter.drawText(
+			state.gameTitle,
+			state.assets.fontTextM,
+			22,
+			ColorRGB24(0xFF, 0xFF, 0xFF),
+			Point(35, 19)
+		);
 
-		painter.drawRectangle(ColorRGBA128F(0, 0, 0, 0.75), Size(state.width - 20, 44), Point(10, 10));
-		painter.drawText(state.gameTitle, state.assets.fontTextM, 22, ColorRGB24(0xFF, 0xFF, 0xFF), Point(35, 19));
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, 90, Point(75, 120));
+		state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(175, 80));
+		drawAnimatedEarth(state);
 
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, 90, Point(75, 120));
-		painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji1, Point(175, 80));
-		drawAnimatedEarth(state, painter);
-
-		painter.drawRectangle(ColorRGBA128F(0.30, 0.75, 0.30, 0.75), buttonPlay.size, buttonPlay.upperLeft);
-		painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonFull.size, buttonFull.upperLeft);
-		painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonMute.size, buttonMute.upperLeft);
+		// dfmt off
+		state.framebufferPainter.drawRectangle(ColorRGBA128F(0.30, 0.75, 0.30, 0.75), buttonPlay.size, buttonPlay.upperLeft);
+		state.framebufferPainter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonFull.size, buttonFull.upperLeft);
+		state.framebufferPainter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonMute.size, buttonMute.upperLeft);
 		version (none) {
-			painter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonQuit.size, buttonQuit.upperLeft);
+			state.framebufferPainter.drawRectangle(ColorRGBA128F(1.00, 1.00, 1.00, 0.75), buttonQuit.size, buttonQuit.upperLeft);
 		}
+		// dfmt on
 
 		enum labelPlayPos = buttonPlay.upperLeft + Point(5, 0);
 		enum labelFullPos = buttonFull.upperLeft + Point(5, 0);
@@ -73,15 +79,13 @@ void onActivate(ref GameState state) {
 		version (none) {
 			static immutable labelQuit = "Quit";
 		}
-		painter.drawText(labelPlay, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelPlayPos);
-		painter.drawText(labelFull, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelFullPos);
-		painter.drawText(labelMute, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelMutePos);
+		state.framebufferPainter.drawText(labelPlay, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelPlayPos);
+		state.framebufferPainter.drawText(labelFull, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelFullPos);
+		state.framebufferPainter.drawText(labelMute, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelMutePos);
 
 		version (none) {
-			painter.drawText(labelQuit, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelQuitPos);
+			state.framebufferPainter.drawText(labelQuit, state.assets.fontTextM, 40, ColorRGB24(0x00, 0x00, 0x00), labelQuitPos);
 		}
-
-		painter.free();
 	}
 }
 
@@ -92,9 +96,7 @@ void onDraw(ref GameState state) {
 	}
 
 	state.titleScreen.earthTicksCheckpoint = state.ticks.total;
-	auto painter = state.framebuffer.makePainter();
-	drawAnimatedEarth(state, painter);
-	painter.free();
+	drawAnimatedEarth(state);
 }
 
 void onInput(ref GameState state, MouseClick input) {
@@ -124,8 +126,8 @@ void onInput(ref GameState state, MouseClick input) {
 	// dfmt on
 }
 
-void drawAnimatedEarth(ref GameState state, ref Painter painter) {
+void drawAnimatedEarth(ref GameState state) {
 	pragma(inline, true);
 	immutable pos = Point(120, 170);
-	game.screens.common.drawAnimatedEarth(state, painter, state.titleScreen.earth, pos, false);
+	game.screens.common.drawAnimatedEarth(state, state.titleScreen.earth, pos, false);
 }

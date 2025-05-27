@@ -32,6 +32,7 @@ struct GameState {
 	const(InteractiveScreen)* nextScreen;
 
 	Pixmap framebuffer;
+	Painter framebufferPainter;
 
 	Ticks ticks;
 

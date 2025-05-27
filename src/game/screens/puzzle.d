@@ -133,28 +133,28 @@ void handleAudio(ref GameState state, bool force) {
 	}
 }
 
-void drawBackground(ref GameState state, ref Painter painter) {
+void drawBackground(ref GameState state) {
 	const region = state.puzzleScreen.g.currentRegion;
 
 	switch (region) with (Region) {
 	case dirt:
-		painter.clear(colorDirt);
+		state.framebufferPainter.clear(colorDirt);
 		break;
 
 	case gras:
-		painter.clear(colorGras);
+		state.framebufferPainter.clear(colorGras);
 		break;
 
 	case snow:
-		painter.clear(colorSnow);
+		state.framebufferPainter.clear(colorSnow);
 		break;
 
 	case volc:
-		painter.clear(colorVolc);
+		state.framebufferPainter.clear(colorVolc);
 		break;
 
 	case boss:
-		painter.clear(colorBoss);
+		state.framebufferPainter.clear(colorBoss);
 		break;
 
 	default:
@@ -163,17 +163,13 @@ void drawBackground(ref GameState state, ref Painter painter) {
 }
 
 void drawAll(ref GameState state) {
-	auto painter = state.framebuffer.makePainter();
-
-	drawBackground(state, painter);
-	drawHUD(state, painter);
-	drawGameFrame(state, painter);
+	drawBackground(state);
+	drawHUD(state);
+	drawGameFrame(state);
 
 	if (state.puzzleScreen.g.level == guideLevel) {
-		drawGuide(state, painter);
+		drawGuide(state);
 	}
-
-	painter.free();
 }
 
 void sendSpeedAsMessage(ref GameState state) {
@@ -257,25 +253,31 @@ ColorRGB24 associatedColor(const Message msg) {
 	}
 }
 
-void drawHUD(ref GameState state, ref Painter painter) {
-	painter.drawRectangle(colorHUDBackground, sizeHUD, Point(0, 0));
+void drawHUD(ref GameState state) {
+	state.framebufferPainter.drawRectangle(colorHUDBackground, sizeHUD, Point(0, 0));
 
 	const Message message = state.puzzleScreen.g.messenger.receive();
 	if (message.content !is null) {
-		painter.drawText(message.content, state.assets.fontTextM, 14, message.associatedColor, Point(10, 5));
+		state.framebufferPainter.drawText(message.content, state.assets.fontTextM, 14, message.associatedColor, Point(10, 5));
 	}
 	else {
-		painter.drawText(state.puzzleScreen.g.currentLevelName, state.assets.fontTextM, 14, colorHUDText, Point(10, 5));
+		state.framebufferPainter.drawText(
+			state.puzzleScreen.g.currentLevelName,
+			state.assets.fontTextM,
+			14,
+			colorHUDText,
+			Point(10, 5)
+		);
 	}
 
-	painter.drawText("Speed", state.assets.fontTextR, 14, colorHUDText, Point(532, 5));
-	painter.drawRectangle(colorHUDButton2, buttonSpeedInc.size, buttonSpeedInc.upperLeft);
-	painter.drawRectangle(colorHUDButton1, buttonSpeedDec.size, buttonSpeedDec.upperLeft);
-	painter.drawText("+", state.assets.fontTextR, 18, colorHUDText, buttonSpeedInc.upperLeft + Point(9, 3));
-	painter.drawText("-", state.assets.fontTextR, 18, colorHUDText, buttonSpeedDec.upperLeft + Point(13, 3));
+	state.framebufferPainter.drawText("Speed", state.assets.fontTextR, 14, colorHUDText, Point(532, 5));
+	state.framebufferPainter.drawRectangle(colorHUDButton2, buttonSpeedInc.size, buttonSpeedInc.upperLeft);
+	state.framebufferPainter.drawRectangle(colorHUDButton1, buttonSpeedDec.size, buttonSpeedDec.upperLeft);
+	state.framebufferPainter.drawText("+", state.assets.fontTextR, 18, colorHUDText, buttonSpeedInc.upperLeft + Point(9, 3));
+	state.framebufferPainter.drawText("-", state.assets.fontTextR, 18, colorHUDText, buttonSpeedDec.upperLeft + Point(13, 3));
 }
 
-void drawGuide(ref GameState state, ref Painter painter) {
+void drawGuide(ref GameState state) {
 	static immutable text = "Instructions:"
 		~ "\nGuide your partner through the course."
 		~ "\n"
@@ -288,14 +290,14 @@ void drawGuide(ref GameState state, ref Painter painter) {
 		~ "\n"
 		~ "\nPress [F] to toggle fullscreen."
 		~ "\nPress [M] to mute/unmute audio.";
-	painter.drawText(text, state.assets.fontTextR, 16, colorGuideText, Point(350, 100));
+	state.framebufferPainter.drawText(text, state.assets.fontTextR, 16, colorGuideText, Point(350, 100));
 }
 
-void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entity entity) {
+void drawGridCell(ref GameState state, Point gridPos, Entity entity) {
 	Point pos = (gridPos * gridCell) + offset;
 
 	void drawImpl(string glyph) {
-		painter.drawGlyph(glyph.ptr, state.assets.fontEmoji2, pos);
+		state.framebufferPainter.drawGlyph(glyph.ptr, state.assets.fontEmoji2, pos);
 	}
 
 	switch (entity) {
@@ -373,7 +375,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 		break;
 
 	case Entity.toothbrushMoustacheMan:
-		drawToothbrushMustacheMan(state, painter, gridCell.y, pos);
+		drawToothbrushMustacheMan(state, gridCell.y, pos);
 		break;
 
 	default:
@@ -381,7 +383,7 @@ void drawGridCell(ref GameState state, ref Painter painter, Point gridPos, Entit
 	}
 }
 
-void drawPartner(ref GameState state, ref Painter painter) {
+void drawPartner(ref GameState state) {
 	const gridPosPartner = state.puzzleScreen.g.partner.pos;
 	const canvPosPartner = (gridPosPartner * gridCell) + offset;
 
@@ -412,42 +414,42 @@ void drawPartner(ref GameState state, ref Painter painter) {
 
 	const intensity = state.puzzleScreen.circleIntensity / 255.0f;
 	const circleColor = ColorRGBA128F(1, 1, 1, intensity);
-	painter.drawCircle(circleColor, radius, canvPosCircle);
+	state.framebufferPainter.drawCircle(circleColor, radius, canvPosCircle);
 
-	painter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, canvPosPartner);
+	state.framebufferPainter.drawGlyph(Emoji.worm.ptr, state.assets.fontEmoji2, canvPosPartner);
 }
 
-void drawTurtles(ref GameState state, ref Painter painter) {
+void drawTurtles(ref GameState state) {
 	enum turtleOffset = offset + Point(0, 5);
 	foreach (gridPosTurtle; state.puzzleScreen.g.world.turtles) {
 		const canvPosTurtle = (gridPosTurtle * gridCell) + turtleOffset;
-		painter.drawGlyph(Emoji.turtle.ptr, state.assets.fontEmoji2, canvPosTurtle);
+		state.framebufferPainter.drawGlyph(Emoji.turtle.ptr, state.assets.fontEmoji2, canvPosTurtle);
 	}
 }
 
-void drawPin(ref GameState state, ref Painter painter) {
+void drawPin(ref GameState state) {
 	const gridPosPin = state.puzzleScreen.g.partner.wormTo;
 	if (state.puzzleScreen.g.partner.wormTo.x >= 0) {
 		enum offsetPin = offset + Point(7, -10);
 		const canvPosPin = (gridPosPin * gridCell) + offsetPin;
-		painter.drawGlyph(Emoji.roundPushpin.ptr, state.assets.fontEmoji2, canvPosPin);
+		state.framebufferPainter.drawGlyph(Emoji.roundPushpin.ptr, state.assets.fontEmoji2, canvPosPin);
 	}
 }
 
-void drawGameFrame(ref GameState state, ref Painter painter) {
+void drawGameFrame(ref GameState state) {
 	state.assets.fontEmoji2.pixelSizes = gridCell.y;
 
 	int y = 0;
 	foreach (row; chunks(state.puzzleScreen.g.world.field, grid.width)) {
 		int x = 0;
 		foreach (entity; row) {
-			drawGridCell(state, painter, Point(x, y), entity);
+			drawGridCell(state, Point(x, y), entity);
 			++x;
 		}
 		++y;
 	}
 
-	drawTurtles(state, painter);
-	drawPartner(state, painter);
-	drawPin(state, painter);
+	drawTurtles(state);
+	drawPartner(state);
+	drawPin(state);
 }

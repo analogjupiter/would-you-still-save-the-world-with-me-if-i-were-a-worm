@@ -27,14 +27,12 @@ void onActivate(ref GameState state) {
 		state.framebuffer.markDirty();
 	}
 
-	auto painter = state.framebuffer.makePainter();
+	state.framebufferPainter.drawRectangle(ColorRGBA128F(0, 0, 0, 0.75), Size(state.width, 200), Point(0, 0));
+	state.framebufferPainter.drawRectangle(ColorRGBA128F(1, 1, 1, 0.75), Size(state.width, 50), Point(0, 200));
 
-	painter.drawRectangle(ColorRGBA128F(0, 0, 0, 0.75), Size(state.width, 200), Point(0, 0));
-	painter.drawRectangle(ColorRGBA128F(1, 1, 1, 0.75), Size(state.width, 50), Point(0, 200));
+	state.framebufferPainter.drawGlyph(Emoji.partyPopper.ptr, state.assets.fontEmoji1, Point(20, 210));
 
-	painter.drawGlyph(Emoji.partyPopper.ptr, state.assets.fontEmoji1, Point(20, 210));
-
-	painter.drawText(
+	state.framebufferPainter.drawText(
 		"Yes!",
 		state.assets.fontTextM,
 		64,
@@ -42,7 +40,7 @@ void onActivate(ref GameState state) {
 		Point(20, 20),
 	);
 
-	painter.drawText(
+	state.framebufferPainter.drawText(
 		"I would you still save the world with you\nif you were a worm.",
 		state.assets.fontTextM,
 		32,
@@ -50,13 +48,11 @@ void onActivate(ref GameState state) {
 		Point(20, 100),
 	);
 
-	painter.drawText(
+	state.framebufferPainter.drawText(
 		"Thanks for playing!",
 		state.assets.fontTextM,
 		32,
 		ColorRGB24(0xFF, 0x00, 0x66),
 		Point(335, 205),
 	);
-
-	painter.free();
 }

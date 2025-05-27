@@ -26,15 +26,15 @@ void clearRandom(ColorRGB24[] data) {
 	}
 }
 
-void drawAnimatedEarth(ref GameState state, ref Painter painter, ref int animationFrame, Point pos, bool keepState) {
+void drawAnimatedEarth(ref GameState state, ref int animationFrame, Point pos, bool keepState) {
 	if (animationFrame == 0) {
-		painter.drawGlyph(Emoji.earthGlobeEuropeAfrica.ptr, state.assets.fontEmoji1, pos);
+		state.framebufferPainter.drawGlyph(Emoji.earthGlobeEuropeAfrica.ptr, state.assets.fontEmoji1, pos);
 	}
 	else if (animationFrame == 1) {
-		painter.drawGlyph(Emoji.earthGlobeAsiaAustralia.ptr, state.assets.fontEmoji1, pos);
+		state.framebufferPainter.drawGlyph(Emoji.earthGlobeAsiaAustralia.ptr, state.assets.fontEmoji1, pos);
 	}
 	else if (animationFrame == 2) {
-		painter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, pos);
+		state.framebufferPainter.drawGlyph(Emoji.earthGlobeAmerics.ptr, state.assets.fontEmoji1, pos);
 	}
 
 	if (keepState) {
@@ -47,8 +47,8 @@ void drawAnimatedEarth(ref GameState state, ref Painter painter, ref int animati
 	}
 }
 
-void drawToothbrushMustacheMan(ref GameState state, ref Painter painter, int size, Point pos) {
-	painter.drawGlyph(Emoji.poutingFace.ptr, state.assets.fontEmoji2, size, pos);
+void drawToothbrushMustacheMan(ref GameState state, int size, Point pos) {
+	state.framebufferPainter.drawGlyph(Emoji.poutingFace.ptr, state.assets.fontEmoji2, size, pos);
 
 	const mustacheSize = Size(
 		(size >> 3) + (size >> 6),
@@ -60,5 +60,5 @@ void drawToothbrushMustacheMan(ref GameState state, ref Painter painter, int siz
 		(size >> 1) + ((size * 5) >> 5),
 	);
 
-	painter.drawRectangle(ColorRGB24(0x29, 0x2F, 0x33), mustacheSize, posMustache);
+	state.framebufferPainter.drawRectangle(ColorRGB24(0x29, 0x2F, 0x33), mustacheSize, posMustache);
 }

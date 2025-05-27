@@ -90,11 +90,8 @@ bool runUI(const(InteractiveScreen)* initialScreen) {
 		SDL_DestroyTexture(texture);
 
 	gameState.framebuffer = Pixmap.makeNew(gameState.width, gameState.height, false);
-	{
-		auto painter = gameState.framebuffer.makePainter();
-		painter.clear(ColorRGB24(0xFF, 0x00, 0x99));
-		painter.free();
-	}
+	gameState.framebufferPainter = gameState.framebuffer.makePainter();
+	gameState.framebufferPainter.clear(ColorRGB24(0xFF, 0x00, 0x99));
 
 	while (gameState.running) {
 		nextScreenHandler(gameState, currentScreen);
@@ -155,6 +152,7 @@ bool runUI(const(InteractiveScreen)* initialScreen) {
 		}
 	}
 
+	gameState.framebufferPainter.free();
 	gameState.audio.stop();
 
 	return true;
