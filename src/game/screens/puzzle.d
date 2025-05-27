@@ -389,20 +389,21 @@ void drawPartner(ref GameState state, ref Painter painter) {
 	const canvPosCircle = canvPosPartner + boxHalf;
 	enum diamtr = (gridCell.x + (gridCell.x >> 1));
 	enum radius = (diamtr >> 1);
+	enum step = 0x05;
 
 	const deltaCircleTicks = state.ticks.total - state.puzzleScreen.circleTicksCheckpoint;
-	if (deltaCircleTicks > 10) {
+	if (deltaCircleTicks > 50) {
 		state.puzzleScreen.circleTicksCheckpoint = state.ticks.total;
 
 		if (state.puzzleScreen.circleIntensityUp) {
-			++state.puzzleScreen.circleIntensity;
+			state.puzzleScreen.circleIntensity += step;
 			if (state.puzzleScreen.circleIntensity >= 0x50) {
 				state.puzzleScreen.circleIntensityUp = false;
 			}
 		}
 		else {
-			--state.puzzleScreen.circleIntensity;
-			if (state.puzzleScreen.circleIntensity <= 0x01) {
+			state.puzzleScreen.circleIntensity -= step;
+			if (state.puzzleScreen.circleIntensity <= 0x10) {
 				state.puzzleScreen.circleIntensityUp = true;
 			}
 		}

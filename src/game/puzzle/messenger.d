@@ -2,13 +2,13 @@ module game.puzzle.messenger;
 
 private alias string = const(char)[];
 
-enum MessageType{
+enum MessageType {
 	regular,
 	alert,
 	success,
 }
 
-struct Message{
+struct Message {
 	string content;
 	MessageType type;
 }
@@ -25,6 +25,10 @@ struct Messenger {
 
 	bool tick(ulong current) {
 		_current = current;
+
+		if (_message.content is null) {
+			return false;
+		}
 
 		const delta = _current - _checkpoint;
 		if (delta > _ttl) {
