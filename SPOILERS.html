@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game Guide to “Would you still save the world with me if I were a worm?”</title>
+<style>
+	html {
+		font-family: sans-serif;
+		font-size: 16px;
+		min-height: 100%;
+	}
+	body {
+		min-height: 100%;
+		background-color: #CA6;
+	}
+	main {
+		margin: 0 auto;
+		max-width: 1280px;
+		padding: 2rem;
+		color: #000;
+		background-color: #F7F8F9;
+	}
+	table.field-of-play {
+		border-collapse: collapse;
+	}
+	table.field-of-play td {
+		border: 1px solid #000;
+		text-align: center;
+	}
+	.level-map {
+		font-family: monospace;
+		background-color: #CA6;
+		color: #FFF;
+		padding: 1rem;
+	}
+</style>
+</head>
+<body>
+<main>
+<h1>
+	Game Guide to “Would you still save the world with me if I were a worm?”
+</h1>
+
+<p>
+	<strong>Would you still save the world with me if I were a worm?</strong>
+	is a puzzle game created by Elias "0xEAB" Batek
+	for the <a href="https://itch.io/jam/4mb-jam-2025">4MB Jam 2025</a>.
+</p>
+
+<details>
+
+<summary><strong>WARNING:</strong> MAJOR SPOILER AHEAD</summary>
+
+<section>
+<h2>Basic gameplay loop</h2>
+
+<p>The game is controlled by mouse.</p>
+
+<p>The field of play is a rectangular grid of 21×11 tiles.</p>
+
+<p>
+	The main protagonist of the game is “your partner” represented by a worm.
+	Left-clicking on a position within the field of play, places a marker that your
+	partner will walk towards to — as far as possible. There is no path finding,
+	the character will always walk in a straigt line until it hits an obstacle.
+</p>
+
+<p>
+	One has to walk to the exit,
+	picking up collectibles,
+	avoiding obstacles and enemies;
+	potentially teleporting one’s way through wormholes.
+</p>
+</section>
+
+<section>
+<h2>Entities</h2>
+
+<p>
+	The main objective is to reach the <strong>exit wormhole</strong> of each puzzle;
+	displayed as a <em>cyclone with a chequered flag</em>.
+	
+	In later levels that contain <strong>collectibles</strong> — in the form of <em>apples</em> —
+	the exit wormhole is only usable after all collectibles have been acquired.
+	Such an locked exit is signified by a <em>lock</em> instead of a chequered flag.
+</p>
+<p>
+	The collectibles are either red or green apples, depending on the “region”
+	of the level.
+</p>
+
+<p>
+	<strong>Rocks</strong> and (regular) <strong>holes</strong> block the path
+	and should be avoided. While rocks act like a wall, holes trap the player
+	and cause the level to be reset — with all character placed in their initial
+	positions.
+</p>
+
+<p>
+	Similar to the exit wormhole, there are also regular <strong>wormholes</strong>
+	that act as a teleportation mechanism.
+	There is always two of them that are <em>linked</em> to each other.
+	Stepping onto one, teleports the player to the other.
+	One does not have to walk off and back onto a them to travel through it;
+	instead wormholes can be retriggered by placing a marker at the current location.
+</p>
+<p>
+	Wormholes also serve as a safe place.
+	Due to the bend in gravitational forces	occuring on them,
+	no enemies can attack a player standing on either end of a wormhole tunnel.
+</p>
+
+<p>
+	<strong>Turtles</strong> serve as the main <em>enemies</em> during the puzzles.
+	They appear in later levels and have to be avoided as they will try to eat the player.
+	Getting eaten by a turtles has equivalent effects to falling into a hole;
+	the player is recovered to their start position and the whole level is reset.
+</p>
+<p>
+	Turtles move around the field and are big enough to step over holes.
+	Rocks, however, block their way.
+</p>
+</section>
+
+<section>
+<h2>Avoiding turtles</h2>
+	
+<p>
+	Turtles are particularly annoying because they cannot be defeated.
+</p>
+<p>
+	Luckily, they have severe weak spots.
+	First of all, turtles one move when the player moves.
+	They can walk up to one field per field that the player goes.
+</p>
+<p>
+	Furthermore, they can only ever walk into four directions:
+	left, right, up and down.
+	This is unlike the player — who can also perform diagonal movements.
+	Combining these facts leads to a tactic where cells that are only diagonal
+	neighbors to turtles can not be occupied by a turtle after the upcoming move.
+
+	<table class="field-of-play">
+		<tr><td>safe</td>  <td>danger</td><td>safe</td>  </tr>
+		<tr><td>danger</td><td>turtle</td><td>danger</td></tr>
+		<tr><td>safe</td>  <td>danger</td><td>safe</td>  </tr>
+	</table>
+</p>
+<p>
+	As outlined earlier, turtles can not attack the player on fields occupied by wormhole.
+	This also includes locked exit wormholes.
+</p>
+<p>
+	All turtle movements are random.
+	Even if it feels like they team up against you, they don’t.
+</p>
+
+</section>
+
+<section>
+<h2>Level Maps</h2>
+
+<table>
+	<thead>
+		<tr><th>Symbol</th><th>Entity</th></tr>
+	</thead>
+	<tbody>
+		<tr><td><code>P</code></td><td>Starting position of Partner</td></tr>
+		<tr><td><code>#</code></td><td>Rock</td></tr>
+		<tr><td><code>o</code></td><td>Hole (regular)</td></tr>
+		<tr><td><code>a</code></td><td>Collectible (apple)</td></tr>
+		<tr><td><code>T</code></td><td>Enemy (turtle)</td></tr>
+		<tr><td><code>1</code></td><td>Wormhole: Pair 1</td></tr>
+		<tr><td><code>2</code></td><td>Wormhole: Pair 2</td></tr>
+		<tr><td><code>3</code></td><td>Wormhole: Pair 3</td></tr>
+		<tr><td><code>4</code></td><td>Wormhole: Pair 4</td></tr>
+		<tr><td><code>5</code></td><td>Wormhole: Pair 5</td></tr>
+		<tr><td><code>6</code></td><td>Wormhole: Pair 6</td></tr>
+		<tr><td><code>7</code></td><td>Wormhole: Pair 7</td></tr>
+		<tr><td><code>8</code></td><td>Wormhole: Pair 8</td></tr>
+		<tr><td><code>9</code></td><td>Wormhole: Pair 9</td></tr>
+		<tr><td><code>A</code></td><td>Wormhole: Pair 10</td></tr>
+		<tr><td><code>B</code></td><td>Wormhole: Pair 11</td></tr>
+		<tr><td><code>C</code></td><td>Wormhole: Pair 12</td></tr>
+		<tr><td><code>D</code></td><td>Wormhole: Pair 13</td></tr>
+		<tr><td><code>E</code></td><td>Wormhole: Pair 14</td></tr>
+		<tr><td><code>F</code></td><td>Wormhole: Pair 15</td></tr>
+		<tr><td><code>X</code></td><td>Wormhole: Exit</td></tr>
+		<tr><td><code>H</code></td><td>Final Boss</td></tr>
+	</tbody>
+</table>
+
+<h3>Puzzles</h3>
+
+<ol>
+<li><pre class="level-map">
+#####
+#   #
+# P #
+#   #
+#   #
+#   #
+# # #
+#   #
+# X #
+#   #
+#####
+</pre>
+<p>
+	Walk around the rock blocking the straight path.
+</p>
+</li>
+
+<li><pre class="level-map">
+#####
+#   #
+# P #
+#   #
+#   #
+#   #
+# o #
+#   #
+# X #
+#ooo#
+#####
+</pre>
+<p>
+	Walk around the hole blocking the straight path.
+</p>
+</li>
+
+<li><pre class="level-map">
+#####   ############ 
+#   #   #          # 
+# P #   #  ######  # 
+#   #   #  #    #  # 
+#   #   #  ######  # 
+#   #   #      o   # 
+#   #   #  ######  ##
+#  o#   #  #    #   #
+#   #####  #    # X #
+# o        #    #   #
+############    #####
+</pre>
+<p>
+	Walk down avoiding both holes.
+	Choose the upper branch (with no hole in the middle).
+</p>
+</li>
+
+<li><pre class="level-map">
+#####################
+#   #          #   1#
+# P # 2        #2   #
+#   #          ######
+#   #              3#
+#   #               #
+#   #   #############
+#   #   #3          #
+# 1 #   #         X #
+#   #   #           #
+#####################
+</pre>
+<p>
+	Go through all teleport wormholes to reach the exit.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+#####################
+#   #4#4   o   o   3#
+# P #5#  o   o   o  #
+#   #################
+#         #     #   #
+#ooo        #       #
+################# o #
+# 2  1 #      #1    #
+#################ooo#
+#2 ##3  6## 6##5  X #
+#        ##  ########
+</pre>
+<p>
+	Walk into wormhole <code>1</code>,
+	then wormhole <code>2</code>.
+	Pick wormhole <code>3</code>.
+	Avoid the holes and on the way to wormhole <code>4</code>.
+	Go through wormhole <code>5</code> to reach the exit.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+#####################
+#P   2#2o6## 7  8 # A
+#### 3##o###      # B
+o5o# 4#3       o  ###
+o  #######           
+  o# 5#4 #         iE
+o6o#     #           
+##########       ####
+                 #C 9
+      oo########o####
+7      E#98A#DC#D#B X
+</pre>
+<p>
+	Go through the following wormholes in the given sequence:
+	<code>3</code>,
+	<code>8</code>,
+	<code>A</code>,
+	<code>B</code>
+</p>
+</li>
+
+
+<li><pre class="level-map">
+P #  #4 ####  # # # #
+  1#  #  ####  # # #9
+ #  #6 #3 #### o#o#o#
+  #  #  #  #### o# #o
+#  #  #  #2 ####  # #
+ #2 #  #  #  ####oo# 
+  #  #  #5 #  ####o #
+#  #  #  #  #  ####  
+ #3 #  #  #  #  ####8
+5 #  #  # 1#  #  ####
+#  #8 #6 #  #  #4 #9X
+</pre>
+<p>
+	Walk all the way down to wormhole <code>8</code>.
+	Then walk up to the top and zigzag through the rocks
+	to reach wormhole <code>9</code>.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+    o     o 1o   o   
+  o o ooo o  o o o o 
+ Po o o o    o o1o o 
+ooo o o ooooo  ooo o 
+    o o  o    o    o 
+o ooo oo o o oo oooo 
+o o      o o 2o o    
+o   oo o2o o oo o o33
+o o    ooo o    o ooo
+o oooooo   o o  o X o
+o        o   o  ooooo
+</pre>
+<p>
+	Walk step by step through the map.
+	Avoid all holes but the exit wormhole.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+       #        #    
+   #      #       #  
+                     
+                9    
+                   X 
+                     
+#########            
+#1o23567#            
+#2P167o8#            
+#344o8o9#            
+#########            
+</pre>
+<p>
+	Go through the following wormholes in the given sequence:
+	<code>3</code> (bottom-left),
+	<code>6</code> (below),
+	<code>7</code> (right),
+	<code>8</code> (below),
+	<code>9</code> (below)
+	<br>
+<pre>
+#########
+# o    7#
+# P 6 o #
+#3  o8o9#
+#########
+</pre>
+</p>
+</li>
+
+
+<li><pre class="level-map">
+### #13# #3 # #876E5#
+#P# #26# # 4# #######
+#1# #### # 5#        
+###      ####  ##### 
+    ####       #94A# 
+    #79#  ###  ##### 
+ D  ####  #B#        
+          #A#    ####
+##        #2#  D #CB#
+X# #####  ### E  ####
+F# #8CF#             
+</pre>
+<p>
+	Go through the following wormholes in the given sequence:
+	<code>1</code> (the only one),
+	<code>2</code> (bottom-left),
+	<code>A</code> (middle),
+	<code>A</code> (current position; right),
+	<code>B</code> (top),
+	<code>C</code> (left),
+	<code>F</code> (right)
+</p>
+</li>
+
+
+<li><pre class="level-map">
+4o8ooo6oF X  o  o o1o
+o o o7ooo###oooo o2o 
+ o ooooo#####   o o  
+       ### # #      o
+     3### # ###    o 
+    4### #######ooooo
+   3##### ### ###F  8
+  2####### # # ###5  
+  ######### ### ###6 
+ #####1######### ### 
+####7o#o5######## P##
+</pre>
+<p>
+	Walk through the rocks, then head to wormhole <code>2</code> (the lower one top-right),
+	then walk to the top where wormhole <code>8</code> is.
+	Finally walk to your left into wormhole <code>F</code>.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+ P                  
+ a        a        a
+ o       a a       o
+ a      a   a      a
+ a     a     a     a
+ a    a       a    a
+ a   a         a   a
+ a  a     X     a  a
+ a a             a a
+ aa               aa
+ a                 a
+</pre>
+<p>
+	Collect all apples, then leave through the now-unlocked exit wormhole.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+ 1#       P        1 
+a #########  #   #   
+###o  5  o# o# o #o o
+    o   o #o #o o# o 
+#### oao  # o# o #o o
+X 6#  o   #2 # 3 # 4 
+#####################
+      #       #      
+  a   #   5   #   6  
+      #       #      
+  2   #   3   #   4  
+</pre>
+<p>
+	Go through wormhole <code>2</code> to collect your first apple.
+	Go back and through wormhole <code>3</code> followed by wormhole <code>5</code>
+	to collect your second apple.
+	Go back and then through wormhole <code>1</code> to collect the last apple.
+	Go back and head to the exit through wormhole <code>4</code>.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+2#6#3#A#7#B#9#8#5#4#1
+ # # # # # # # # # # 
+ # # # # # # # # # # 
+ # # # # # # # # # # 
+ # # # # # # # # # # 
+P#a#a#a#a#X#a#a#a#a# 
+ # # # # # # # # # # 
+ # # # # # # # # # # 
+ # # # # # # # # # # 
+ # # # # # # # # # # 
+1#4#5#8#9#A#B#6#7#2#3
+</pre>
+<p>
+	Walk down the current aisle and get teleported again and again to collect all apples.
+	Repeat this exact same strategy to go back to the now-unlocked exit wormhole.
+</p></li>
+
+
+<li><pre class="level-map">
+##  oo    a    oo  ##
+#    oo   1   oo    #
+   a  oo  o  oo  a   
+      Ao#####oB      
+oooooooA#o1o#Booooooo
+ a    4o#4P2#o2    X 
+oooooooD#o3o#Cooooooo
+      Do#####oC      
+   a  oo  o  oo  a   
+#    oo   3   oo    #
+##  oo    a    oo  ##
+</pre>
+<p>
+	This one is quite straightforward.
+	Just make sure to avoid all holes.
+	Use wormhole retriggering to shorten your travel.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+ X          Ao#oB  ao
+################## ##
+6   5o#o5 ao#o9     A
+## ##################
+4    3oo#E  a#o8 a  6
+################### #
+a C a D Eo# 4 ao#oa  
+#####################
+8 a 9o#o3  1oo#oB  Co
+#####################
+oa D#o 2 ao#oo1  P 2o
+</pre>
+<p>
+	Start with wormhole <code>2</code> to collect your first apple.
+	Then go back and go through wormhole <code>1</code>.
+	Go through the following wormholes in the given sequence (and collect all apples):
+	<code>3</code>,
+	<code>4</code>,
+	<code>4</code>,
+	<code>5</code>,
+	<code>5</code>,
+	<code>6</code> (collect both apples around),
+	<code>8</code>,
+	<code>9</code>,
+	<code>B</code>,
+	<code>C</code>,
+	<code>D</code>,
+	<code>D</code>,
+	<code>E</code>,
+	<code>E</code>,
+	<code>D</code>,
+	<code>D</code>,
+	<code>C</code>,
+	<code>B</code>,
+	<code>A</code>,
+</p>
+</li>
+
+
+<li><pre class="level-map">
+#####################
+#P                 a#
+#                   #
+#  T             T  #
+#                   #
+#         X         #
+#                   #
+#  T             T  #
+#                   #
+#a                 a#
+#####################
+</pre>
+<p>
+	Collect all apples, avoid the turtles.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+1P        a       T#a
+          a       T#3
+          a       T##
+####T     a       3 T
+a  #T     a         T
+  2#T     a         T
+####T     a         T
+    2     a         T
+          a      T###
+          a      T#1 
+T         a       # X
+</pre>
+<p>
+	No matter what you do, avoid the turtles.
+	Collect all apples in the middle,
+	go through the wormholes to collect the respective apples.
+	Go back up and turn left to wormhole <code>1</code> to reach the exit.
+</p>
+</li>
+
+
+<li><pre class="level-map">
+ooooooooooooooooooooo
+o                   o
+o P               X o
+o                   o
+oooooooooooooooooo  o
+o T T T T T T T T T o
+o                   o
+o         a         o
+ooo               ooo
+a o               o a
+T1o1T           T2o2T
+</pre>
+<p>
+	There is no particular strategy necessary.
+	Have a look at the apple in the middle of the lower sector;
+	avoid missing it on accident.
+	But no matter what you do, avoid the turtles.
+	Keep in mind, wormholes are safe places.
+</p>
+</li>
+
+<li><pre class="level-map">
+ooooooooooooooooooooo
+o     ooooooooooooooo
+o  P  oo           oo
+o     oo    T T    oo
+oo   ooo  ooooooo  oo
+oo   ooo  ooooooo  oo
+oo   ooo  ooooooo  oo
+oo   ooo  ooooooo  oo
+oo        ooooooo  oo
+oo      a ooooo      
+oo        ooooo   X  
+</pre>
+<p>
+	Do not underestimate those two turtles.
+	Instead, try avoiding them.
+</p>
+</li>
+</ol>
+
+<h3>Boss Phases</h3>
+
+<p>
+	This is going to be tough.
+	<br>Key strategy:Retrying. Again. And again.
+</p>
+<p>
+	Pro tip: Avoid those turtles!
+</p>
+
+<ol>
+<li><pre class="level-map">
+                    
+ a        P         
+                    
+        TTTTT       
+        T###T       
+  oooo  T# #T  oooo 
+        T###T       
+        TTTTT       
+                    
+          X        a
+                    
+</pre></li>
+
+
+<li><pre class="level-map">
+          o         
+ a        X        a
+          o         
+        TTTTT       
+        T###T       
+  oooo  T# #T  oooo 
+        T###T       
+        TTTTT       
+          o         
+ a        P        a
+          o         
+</pre></li>
+
+
+<li><pre class="level-map">
+          o         
+ a    o   P   o    a
+       o  o  o      
+        TTTTT       
+        T###T       
+  oooo  T# #T  oooo 
+        T###T       
+        TTTTT       
+       o  o  o      
+ a    o   X   o    a
+          o         
+</pre></li>
+
+
+<li><pre class="level-map">
+          o        
+      o       o    
+       o  o  o     
+        TTTTT      
+        T# #T      
+  oooo  T H T  oooo
+        T# #T      
+        TTTTT      
+       o  o  o     
+      o   P   o    
+          o        
+</pre>
+<p>
+	In case it is not obvious:
+	Capture Toothbrush-Mustache Man!
+</p>
+</li>
+</ol>
+
+</section>
+
+</details>
+</main>
+<script>
+	// Level Map Highlighter
+	const levelMaps = document.getElementsByClassName('level-map');
+	for (let m = 0; m < levelMaps.length; ++m) {
+		const levelMap = levelMaps[m];
+		const origData = levelMap.textContent;
+			
+		const replacement = document.createElement('div');
+		for (let i = 0; i < origData.length; ++i) {
+			const entity = origData[i];
+
+			if (entity === '\n') {
+				replacement.appendChild(document.createElement('br'));
+				continue;
+			}
+
+			let color = '#000';
+			switch (entity) {
+				case 'P':
+					color = '#FFF';
+					break;
+				case '#':
+					color = '#111';
+					break;
+				case 'o':
+					color = '#F00';
+					break;
+				case 'a':
+					color = '#090';
+					break;
+				case 'T':
+					color = '#FF0';
+					break;
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+				case 'A':
+				case 'B':
+				case 'C':
+				case 'D':
+				case 'E':
+				case 'F':
+					color = '#00F';
+					break;
+				case 'H':
+				case 'X':
+					color = '#0FF';
+					break;
+			}
+
+			const cell = document.createElement('span');
+			cell.textContent = origData[i];
+			cell.style.color = color;
+			replacement.appendChild(cell);
+		}
+		levelMap.textContent = '';
+		levelMap.appendChild(replacement);
+	}
+</script>
+</body>
+</html>
