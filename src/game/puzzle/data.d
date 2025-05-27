@@ -295,10 +295,15 @@ private:
 			const targetEntity = world.getEntity(next);
 			if (
 				targetEntity.isWall ||
-				targetEntity == Entity.turtle ||
 				targetEntity == Entity.toothbrushMoustacheMan
 				) {
 				return;
+			}
+
+			foreach (turtle; world.turtles) {
+				if (turtle == next) {
+					return;
+				}
 			}
 
 			pos = next;
