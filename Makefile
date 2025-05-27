@@ -2,7 +2,7 @@
 
 
 ## Name of the project
-project_name := wysstwfmiiwaw
+project_name := wysstwwmiiwaw
 
 ### Project paths
 user_project_root   := .
