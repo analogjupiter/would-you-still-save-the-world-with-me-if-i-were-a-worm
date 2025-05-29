@@ -368,9 +368,9 @@ pragma(inline, true) {
 
 	void drawSlide5(ref GameState state) {
 		static immutable text =
-			"The team mounts fills the collected remains into an ash tray and mounts it"
-			~ "\non the machinery. After a routine check, the apparatus gets finally turned"
-			~ "\non. LEDs start blinking, unpleasantly loud noises are generated. “It is"
+			"The team fills the collected remains into an ash tray and mounts it on the"
+			~ "\nmachinery. After a routine check, the apparatus gets finally turned on."
+			~ "\nLEDs start blinking, unpleasantly loud noises are generated. “It is"
 			~ "\nworking,” the scientists are relieved."
 			~ "\n"
 			~ "\nAfter hours of waiting, results are coming in: Everything looks good so far."
@@ -404,8 +404,8 @@ pragma(inline, true) {
 			~ "\nthe wreckage that used to be their machine. A good chunk of the"
 			~ "\ncomponents seems to have disappeared."
 			~ "\n"
-			~ "\nInstead of leaving behind a void, a wormhole has opened up. It has has"
-			~ "\nalready absorbed large parts of the apparatus. And it proceeds to absorb"
+			~ "\nInstead of leaving behind a void, a wormhole has opened up. It has already"
+			~ "\nabsorbed large parts of the apparatus. And it proceeds to absorb"
 			~ "\nwhatever comes near it. “That is…?” — “Eventually the whole planet!”";
 
 		state.framebufferPainter.drawGlyph(Emoji.hole.ptr, state.assets.fontEmoji1, Point(230, 190));
