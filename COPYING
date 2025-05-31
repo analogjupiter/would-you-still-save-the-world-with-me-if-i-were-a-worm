@@ -4,6 +4,17 @@ Licensing information of
 “Would you still save the world with me if I were a worm?”
 
 
+## Please note
+
+The files that make up this game are licensed under varying terms.
+
+For example, while the game code itself is open source (MIT license),
+most of the audio assets are not (CC-BY-NC-4.0’ish license).
+
+The libraries that the source code depends on are also made available under
+different license terms by their respective copyright holders.
+
+
 ## Game Code
 
 MIT License
@@ -202,6 +213,7 @@ License along with this library; if not, write to the
 Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 
+
 ### SDL2
 
 Simple DirectMedia Layer
@@ -236,7 +248,15 @@ contradicting statement on his “about” page saying:
 > If you want to use it for something, please ask me first.
 > (I will say yes probably but still wanna know)
 
-I have reached out to him, but haven’t gotten a response yet.
+I have reached out to him and have been asked whether my game would be free or
+commercial but haven’t gotten a follow-up response yet.
+
+Although I would have prefered to get cerror’s explicit permission in writing,
+given that the initial response to my listing of the used audio did not receive
+an immediate objection and the fact there is a CC-BY-NC-4.0 marker on the
+downloads page of his website, I believe the use of his music in my game is
+fine. (Unfortunately, the game jam’s deadline is coming closer and closer.)
+
 
 ### dintro.mod
 
