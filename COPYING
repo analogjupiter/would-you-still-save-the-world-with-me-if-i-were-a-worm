@@ -11,8 +11,9 @@ The files that make up this game are licensed under varying terms.
 For example, while the game code itself is open source (MIT license),
 most of the audio assets are not (CC-BY-NC-4.0’ish license).
 
-The libraries that the source code depends on are also made available under
-different license terms by their respective copyright holders.
+The libraries that the source code depends on are provided under different
+licensing terms by their respective copyright holders. (Those are not covered
+by the license of the game code!)
 
 
 ## Game Code
